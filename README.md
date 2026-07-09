@@ -27,6 +27,8 @@ It is **not** an autorouter, a netlist-to-art generator, or an electrical-approv
 - Pages dominated by isolated net labels
 - Buses crossing symbols, text, or unrelated functional blocks
 - USB, reset, power, clock, and glue logic that visually appears to float
+- Missing layout handoff context for buses, power capacity, reference planes,
+  controlled interfaces, antenna keepouts, and manufacturer guidance
 - One-page schematics that should be split into functional sheets
 - Generated schematics where the generator—not the rendered file—is the source of truth
 
@@ -104,9 +106,10 @@ The skill is designed to stop presentation work from silently becoming a circuit
 3. Preserve component references, pin membership, net names, and connectivity unless the user explicitly authorizes an electrical change.
 4. Use direct wires for local relationships and buses for repeated related signals—not as decoration.
 5. Regenerate, export, and compare with tool-appropriate checks.
-6. Inspect every rendered page at full-page scale and around dense areas.
-7. Report electrical concerns separately. A readable schematic is not necessarily a correct circuit.
-8. Label PDF/image-only conclusions as visually guided and unverified.
+6. When justified, add `[SPEC]`, `[TARGET]`, and `[TBD-MEASURE]` layout callouts plus a source-backed companion guide.
+7. Inspect every rendered page at full-page scale and around dense areas, again after annotations so comments cannot hide the circuit.
+8. Report electrical concerns separately. A readable schematic is not necessarily a correct circuit.
+9. Label PDF/image-only conclusions as visually guided and unverified.
 
 ## Repository layout
 
