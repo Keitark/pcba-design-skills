@@ -24,6 +24,8 @@ Before editing, identify the EDA format and create an evidence path with these s
 
 Each adapter must state its accepted source, exporter/parser, canonical field mapping, renderer, ERC/lint path, protected artifacts, and known limitations. Read [references/adapters.md](references/adapters.md) for KiCad, Altium, EasyEDA, Eagle/Fusion, gEDA/Lepton, SPICE, and image-only guidance.
 
+Before editing, also read the mandatory [visual audit checklist](references/visual-audit-checklist.md). When the user requests layout guidance, or when clocks, buses, power rails, high-current paths, RF, USB, memory, or other placement-sensitive interfaces are obvious, also read [layout handoff annotations](references/layout-handoff-annotations.md).
+
 ## Workflow / 作業手順
 
 1. **Capture the baseline / 変更前基準を保存する**
@@ -49,12 +51,20 @@ Each adapter must state its accepted source, exporter/parser, canonical field ma
    - Keep orthogonal routes, consistent grid alignment, generous whitespace, and visible junctions. Do not claim completion while any overlap remains.
    - 配線を部品や文字の下へ通さない。直交配線、十分な余白、明確な接続点を維持する。
 
-5. **Render and iterate / 画像で反復確認する**
+5. **Add layout handoff guidance when justified / 必要な場合はレイアウト注記を追加する**
+   - Add concise callouts when the user clearly asks, or when the source makes clocks/data rates, parallel buses, controlled-impedance pairs, power-current paths, reference planes, antenna keepouts, or manufacturer placement rules easy to identify.
+   - Mark every value as `[SPEC]` (authoritative requirement), `[TARGET]` (project routing allocation), or `[TBD-MEASURE]` (requires measurement or engineering signoff). Never present an estimate as a verified limit.
+   - Record rate plus edge-rate caveat, topology/stub rule, reference plane, loose skew target, provisional current allocation, trace/via intent, and authoritative component guidance URL when applicable. Keep full URLs in a companion document, not across the drawing.
+   - ユーザーの明示要求、または回路からクロック、バス、電源、RF、USB、配置制約を明確に判断できる場合に注記する。仕様・設計目標・要実測を区別し、推定値を確定値として書かない。
+
+6. **Render and iterate / 画像で反復確認する**
    - Export all sheets to PDF after each meaningful pass. Render every page to PNG at readable resolution and inspect page edges plus dense areas around large ICs, connectors, memories, and buses.
    - Correct overlap, apparent floating pins, reversed flow, clipped text, and excessive label dependence; render again.
-   - 全ページを PNG 化して目視確認し、重なりや見た目上の未接続がなくなるまで修正する。
+   - Inspect the whole page and dense crops after annotations are added. Reject any callout covering signal flow, clipped link, text over a wire/bus, or bus spine under a symbol even if ERC is clean.
+   - Follow every item in the mandatory visual audit checklist; wire count is not a success metric.
+   - 全ページと高密度部分を PNG 化して目視確認し、重なりや見た目上の未接続がなくなるまで修正する。注記追加後も必ず再確認する。
 
-6. **Prove what can be proved / 検証可能な範囲を証明する**
+7. **Prove what can be proved / 検証可能な範囲を証明する**
    - Normalize baseline and final exports, then run:
 
      ```text

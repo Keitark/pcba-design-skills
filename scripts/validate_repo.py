@@ -29,6 +29,8 @@ REQUIRED_FILES = (
     ROOT / "assets" / "banner.svg",
     SKILL_MD,
     SKILL_DIR / "agents" / "openai.yaml",
+    SKILL_DIR / "references" / "visual-audit-checklist.md",
+    SKILL_DIR / "references" / "layout-handoff-annotations.md",
 )
 
 LINK_RE = re.compile(r"!?(?:\[[^\]]*\])\(([^)]+)\)")
@@ -80,8 +82,8 @@ def validate_skill(errors: list[str]) -> None:
         fail("skill description must clearly explain capability and triggers", errors)
     if not body.strip():
         fail("SKILL.md body must not be empty", errors)
-    if re.search(r"\b(?:TODO|TBD)\b", text, re.IGNORECASE):
-        fail("SKILL.md contains TODO or TBD", errors)
+    if re.search(r"\bTODO\b", text, re.IGNORECASE):
+        fail("SKILL.md contains TODO", errors)
 
 
 def validate_links(errors: list[str]) -> None:
