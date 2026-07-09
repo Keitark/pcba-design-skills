@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-labelledby="title desc">
+  <title id="title">Schematic Humanizer</title>
+  <desc id="desc">A dark circuit-inspired banner transforming disconnected labels into clean connected functional blocks.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#090e1a"/>
+      <stop offset="0.48" stop-color="#101a2f"/>
+      <stop offset="1" stop-color="#182342"/>
+    </linearGradient>
+    <linearGradient id="trace" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#55d6be"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#243457"/>
+      <stop offset="1" stop-color="#131d34"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#9db0d0" stroke-opacity=".055" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="420" rx="24" fill="url(#bg)"/>
+  <rect width="1280" height="420" rx="24" fill="url(#grid)"/>
+  <path d="M0 327C224 246 370 395 625 300S1010 236 1280 308V420H0Z" fill="#55d6be" opacity=".035"/>
+
+  <!-- Label-soup side -->
+  <g opacity=".72" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#aebcd4">
+    <rect x="52" y="60" width="266" height="300" rx="18" fill="#0b1222" stroke="#41506d"/>
+    <text x="76" y="94" fill="#7787a3" font-size="11" letter-spacing="2.3">BEFORE / LABEL SOUP</text>
+    <rect x="123" y="150" width="124" height="104" rx="10" fill="url(#chip)" stroke="#60708e"/>
+    <text x="185" y="194" text-anchor="middle" fill="#d7dfed" font-size="15" font-weight="700">MCU</text>
+    <text x="185" y="217" text-anchor="middle" fill="#7787a3">U1</text>
+    <g fill="#e85d75">
+      <circle cx="91" cy="137" r="3"/><circle cx="276" cy="126" r="3"/><circle cx="80" cy="282" r="3"/><circle cx="286" cy="288" r="3"/>
+    </g>
+    <g fill="#aebcd4">
+      <text x="74" y="126">USB_D+</text><text x="238" y="116">RESET_N</text>
+      <text x="63" y="305">BUS_D[0..7]</text><text x="238" y="312">LOAD_EN</text>
+      <text x="67" y="232">CLK</text><text x="258" y="238">OE_N</text>
+    </g>
+    <g stroke="#65718a" stroke-width="2">
+      <path d="M106 132h17M247 132h30M103 277h20M247 277h32M104 228h19M247 228h20"/>
+    </g>
+  </g>
+
+  <!-- Transformation arrow -->
+  <g filter="url(#glow)">
+    <path d="M345 210h72" fill="none" stroke="url(#trace)" stroke-width="4" stroke-linecap="round"/>
+    <path d="m405 197 16 13-16 13" fill="none" stroke="#8b5cf6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Main identity -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="450" y="56" width="220" height="28" rx="14" fill="#55d6be" opacity=".12" stroke="#55d6be" stroke-opacity=".55"/>
+    <text x="560" y="75" text-anchor="middle" fill="#71e3ce" font-size="11" font-weight="700" letter-spacing="2.1">HUMAN-FIRST SCHEMATICS</text>
+    <text x="450" y="142" fill="#f5f8ff" font-size="45" font-weight="800" letter-spacing="-1.5">Schematic</text>
+    <text x="450" y="194" fill="url(#trace)" font-size="45" font-weight="800" letter-spacing="-1.5">Humanizer</text>
+    <text x="452" y="237" fill="#b2bfd5" font-size="18">Make the signal path visible.</text>
+    <text x="452" y="269" fill="#7f90ad" font-size="15">回路図を、人が読める設計資料へ。</text>
+    <g font-size="12" font-weight="700" letter-spacing="1">
+      <rect x="450" y="306" width="93" height="30" rx="15" fill="#8b5cf6" opacity=".17" stroke="#8b5cf6"/>
+      <text x="496" y="326" text-anchor="middle" fill="#c5adff">MULTI-EDA</text>
+      <rect x="555" y="306" width="119" height="30" rx="15" fill="#55d6be" opacity=".14" stroke="#55d6be"/>
+      <text x="614" y="326" text-anchor="middle" fill="#86ead7">SAFETY GATED</text>
+    </g>
+  </g>
+
+  <!-- Human-readable side -->
+  <g transform="translate(748 49)">
+    <rect width="480" height="322" rx="18" fill="#0b1222" stroke="#41506d"/>
+    <text x="24" y="35" fill="#7787a3" font-family="Arial, Helvetica, sans-serif" font-size="11" letter-spacing="2.3">AFTER / REVIEWABLE FLOW</text>
+    <g font-family="Arial, Helvetica, sans-serif" text-anchor="middle">
+      <rect x="28" y="88" width="92" height="78" rx="10" fill="url(#chip)" stroke="#55d6be"/>
+      <text x="74" y="121" fill="#f0f4fb" font-size="13" font-weight="700">USB</text>
+      <text x="74" y="141" fill="#7f90ad" font-size="11">POWER + DATA</text>
+      <rect x="192" y="78" width="112" height="100" rx="10" fill="url(#chip)" stroke="#8b5cf6"/>
+      <text x="248" y="121" fill="#f0f4fb" font-size="15" font-weight="700">MCU</text>
+      <text x="248" y="143" fill="#7f90ad" font-size="11">CONTROL</text>
+      <rect x="372" y="88" width="80" height="78" rx="10" fill="url(#chip)" stroke="#f4b942"/>
+      <text x="412" y="121" fill="#f0f4fb" font-size="13" font-weight="700">SRAM</text>
+      <text x="412" y="141" fill="#7f90ad" font-size="11">MEMORY</text>
+      <rect x="184" y="226" width="128" height="62" rx="10" fill="url(#chip)" stroke="#e85d75"/>
+      <text x="248" y="253" fill="#f0f4fb" font-size="13" font-weight="700">RESET + GATING</text>
+      <text x="248" y="273" fill="#7f90ad" font-size="11">SAFE OWNERSHIP</text>
+    </g>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M120 112h40v-18h32M120 143h52v18h20" stroke="#55d6be" stroke-width="3"/>
+      <path d="M304 102h38v10h30M304 143h38v-10h30" stroke="#f4b942" stroke-width="3"/>
+      <path d="M248 178v48" stroke="#e85d75" stroke-width="3"/>
+      <path d="M312 257h100v-91" stroke="#8b5cf6" stroke-width="3"/>
+      <path d="M184 257H74v-91" stroke="#8b5cf6" stroke-width="3"/>
+    </g>
+    <g fill="#55d6be"><circle cx="160" cy="112" r="4"/><circle cx="172" cy="161" r="4"/></g>
+    <g fill="#f4b942"><circle cx="342" cy="112" r="4"/><circle cx="342" cy="133" r="4"/></g>
+    <g fill="#e85d75"><circle cx="248" cy="202" r="4"/></g>
+    <g fill="#8b5cf6"><circle cx="412" cy="257" r="4"/><circle cx="74" cy="257" r="4"/></g>
+  </g>
+</svg>

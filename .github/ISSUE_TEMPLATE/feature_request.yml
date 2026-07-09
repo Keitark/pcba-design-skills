@@ -1,0 +1,54 @@
+name: Feature or adapter request / 機能・アダプター提案
+description: Suggest a workflow improvement or source-format adapter / ワークフロー改善や入力形式対応を提案
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve / 解決したい問題
+      description: Describe the review problem, not only the desired implementation / 実装案だけでなくレビュー上の問題を説明
+    validations:
+      required: true
+
+  - type: input
+    id: tool
+    attributes:
+      label: EDA tool or source type / EDA ツール・入力形式
+      placeholder: Altium Designer 25, EasyEDA Pro, SPICE, scanned PDF...
+    validations:
+      required: true
+
+  - type: textarea
+    id: authoritative_source
+    attributes:
+      label: Authoritative source and exports / 正本とエクスポート
+      description: What can be edited, rendered, and exported for validation? / 編集・レンダー・検証用出力として何が利用可能ですか
+    validations:
+      required: true
+
+  - type: dropdown
+    id: evidence_level
+    attributes:
+      label: Best expected evidence level / 想定する最大検証レベル
+      options:
+        - A — exact connectivity comparison
+        - B — structured source with partial validation
+        - C — visually guided only
+        - Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example workflow / 使用例
+      description: Give a small, non-confidential example and expected result / 小さく機密でない例と期待結果
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Official format or automation references / 公式仕様・自動化資料
+      description: Link to primary documentation when available / 可能なら一次資料へのリンク

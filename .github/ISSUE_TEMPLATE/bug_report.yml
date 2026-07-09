@@ -1,0 +1,87 @@
+name: Bug report / バグ報告
+description: Report a reproducible skill, adapter, validation, or documentation problem / 再現可能な問題を報告
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Schematic Humanizer. Remove confidential design data before attaching files.
+        ご協力ありがとうございます。添付前に機密設計データを除去してください。
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment / 環境
+      description: OS, Codex surface/version, EDA tool and version / OS、Codex、EDA ツールとバージョン
+      placeholder: Windows 11, Codex Desktop, KiCad 10.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source_type
+    attributes:
+      label: Source type / 入力形式
+      options:
+        - KiCad source or generator
+        - Altium source or export
+        - EasyEDA source or export
+        - EAGLE or Fusion source/export
+        - gEDA or Lepton source
+        - SPICE or standalone netlist
+        - PDF or image only
+        - Documentation or installation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Prompt used / 使用したプロンプト
+      description: Include the exact request when possible / 可能なら依頼文をそのまま記載
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result / 期待する結果
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result / 実際の結果
+      description: Include complete errors and the smallest useful before/after image / 完全なエラーと最小限の比較画像を添付
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Validation evidence / 検証情報
+      description: Netlist/ERC/compile comparison, or state that the source is visual-only / ネットリスト・ERC・コンパイル比較。画像のみならその旨
+      placeholder: Evidence level A/B/C; net count before/after; ERC result; unverified areas...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps / 再現手順
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checks / 安全確認
+      options:
+        - label: I removed credentials, confidential designs, and proprietary data. / 認証情報・機密設計・独自データを除去しました。
+          required: true
+        - label: I understand that visual cleanup is not electrical approval. / 見やすさの改善は電気的承認ではないと理解しています。
+          required: true

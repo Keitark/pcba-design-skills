@@ -1,0 +1,4 @@
+interface:
+  display_name: "Schematic Humanizer"
+  short_description: "Make circuit schematics readable without connectivity drift"
+  default_prompt: "Use $schematic-humanizer to turn this label-heavy circuit schematic into a clearly wired, visually verified diagram while preserving proven connectivity."
