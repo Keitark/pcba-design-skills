@@ -1,6 +1,6 @@
 <div align="center">
 
-![Schematic Humanizer banner](assets/banner.svg)
+![Schematic Humanizer banner using the real nescart schematic](assets/banner.png)
 
 # Schematic Humanizer
 
