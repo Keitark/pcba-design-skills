@@ -1,6 +1,6 @@
 <div align="center">
 
-![実際の nescart 回路図を使用した Schematic Humanizer バナー](assets/banner.png)
+![実際の読みにくい nescart 回路図と読みやすい回路図を切り替える Schematic Humanizer アニメーションバナー](assets/banner.gif)
 
 # Schematic Humanizer
 

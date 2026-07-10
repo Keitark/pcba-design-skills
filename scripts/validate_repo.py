@@ -26,7 +26,7 @@ REQUIRED_FILES = (
     ROOT / "docs" / "installation.ja.md",
     ROOT / "docs" / "adapters.md",
     ROOT / "docs" / "adapters.ja.md",
-    ROOT / "assets" / "banner.png",
+    ROOT / "assets" / "banner.gif",
     SKILL_MD,
     SKILL_DIR / "agents" / "openai.yaml",
     SKILL_DIR / "references" / "visual-audit-checklist.md",

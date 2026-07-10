@@ -1,6 +1,6 @@
 <div align="center">
 
-![Schematic Humanizer banner using the real nescart schematic](assets/banner.png)
+![Animated Schematic Humanizer banner flipping between the real unreadable and readable nescart schematics](assets/banner.gif)
 
 # Schematic Humanizer
 
