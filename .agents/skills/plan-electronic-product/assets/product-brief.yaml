@@ -1,0 +1,31 @@
+schema: electronic-product-brief-v1
+project_id: ""
+revision: ""
+status: BLOCKED
+purpose:
+  user_problem: ""
+  success_behavior: []
+  prohibited_behavior: []
+environment:
+  operating_conditions: []
+  lifetime_target: ""
+functions: []
+operating_states: []
+interfaces: []
+power:
+  sources: []
+  rails: []
+  budget_by_mode: []
+mechanics:
+  envelope: ""
+  connectors_and_controls: []
+  keepouts: []
+production:
+  prototype_quantity: null
+  target_quantity: null
+  assembled_cost_target: null
+  lifecycle_target: ""
+verification: []
+unknowns: []
+assumptions: []
+sources: []

@@ -10,22 +10,96 @@ permissions:
   contents: read
 
 jobs:
-  repository:
-    name: Skill and documentation
+  linux:
+    name: Skills, contracts, and shell install
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
       - name: Install validation dependency
         run: python -m pip install --disable-pip-version-check "PyYAML==6.0.2"
 
-      - name: Validate skill and repository
+      - name: Validate repository
         run: python scripts/validate_repo.py
+
+      - name: Run deterministic tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Install one and all skills for Codex and Claude
+        run: |
+          mkdir -p "$RUNNER_TEMP/codex-one" "$RUNNER_TEMP/codex-all" "$RUNNER_TEMP/claude-one" "$RUNNER_TEMP/claude-all"
+          ./scripts/install-skills.sh codex-project --project "$RUNNER_TEMP/codex-one" schematic-humanizer
+          ./scripts/install-skills.sh codex-project --project "$RUNNER_TEMP/codex-all" --all
+          ./scripts/install-skills.sh claude-project --project "$RUNNER_TEMP/claude-one" schematic-humanizer
+          ./scripts/install-skills.sh claude-project --project "$RUNNER_TEMP/claude-all" --all
+          test "$(find "$RUNNER_TEMP/codex-one/.agents/skills" -name SKILL.md | wc -l)" -eq 1
+          test "$(find "$RUNNER_TEMP/codex-all/.agents/skills" -name SKILL.md | wc -l)" -eq 8
+          test "$(find "$RUNNER_TEMP/claude-one/.claude/skills" -name SKILL.md | wc -l)" -eq 1
+          test "$(find "$RUNNER_TEMP/claude-all/.claude/skills" -name SKILL.md | wc -l)" -eq 8
+
+      - name: Refuse collisions atomically
+        run: |
+          mkdir -p "$RUNNER_TEMP/atomic/.claude/skills/schematic-humanizer"
+          echo sentinel > "$RUNNER_TEMP/atomic/.claude/skills/schematic-humanizer/sentinel"
+          if ./scripts/install-skills.sh claude-project --project "$RUNNER_TEMP/atomic" --all; then exit 1; fi
+          test "$(find "$RUNNER_TEMP/atomic/.claude/skills" -mindepth 1 -maxdepth 1 -type d | wc -l)" -eq 1
+          test -f "$RUNNER_TEMP/atomic/.claude/skills/schematic-humanizer/sentinel"
+
+  windows:
+    name: UTF-8 and PowerShell install
+    runs-on: windows-latest
+    timeout-minutes: 10
+    env:
+      PYTHONUTF8: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validation dependency
+        run: python -m pip install --disable-pip-version-check "PyYAML==6.0.2"
+
+      - name: Validate repository
+        run: python scripts/validate_repo.py
+
+      - name: Run deterministic tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Install one and all skills for Codex and Claude
+        shell: pwsh
+        run: |
+          $codexOne = Join-Path $env:RUNNER_TEMP "codex-one"
+          $codexAll = Join-Path $env:RUNNER_TEMP "codex-all"
+          $claudeOne = Join-Path $env:RUNNER_TEMP "claude-one"
+          $claudeAll = Join-Path $env:RUNNER_TEMP "claude-all"
+          New-Item -ItemType Directory -Force $codexOne,$codexAll,$claudeOne,$claudeAll | Out-Null
+          ./scripts/install-skills.ps1 -Target codex-project -Skills schematic-humanizer -ProjectRoot $codexOne
+          ./scripts/install-skills.ps1 -Target codex-project -All -ProjectRoot $codexAll
+          ./scripts/install-skills.ps1 -Target claude-project -Skills schematic-humanizer -ProjectRoot $claudeOne
+          ./scripts/install-skills.ps1 -Target claude-project -All -ProjectRoot $claudeAll
+          if ((Get-ChildItem "$codexOne/.agents/skills" -Filter SKILL.md -Recurse).Count -ne 1) { throw "Codex one failed" }
+          if ((Get-ChildItem "$codexAll/.agents/skills" -Filter SKILL.md -Recurse).Count -ne 8) { throw "Codex all failed" }
+          if ((Get-ChildItem "$claudeOne/.claude/skills" -Filter SKILL.md -Recurse).Count -ne 1) { throw "Claude one failed" }
+          if ((Get-ChildItem "$claudeAll/.claude/skills" -Filter SKILL.md -Recurse).Count -ne 8) { throw "Claude all failed" }
+
+      - name: Refuse collisions atomically
+        shell: pwsh
+        run: |
+          $root = Join-Path $env:RUNNER_TEMP "atomic"
+          $existing = Join-Path $root ".claude/skills/schematic-humanizer"
+          New-Item -ItemType Directory -Force $existing | Out-Null
+          Set-Content -LiteralPath (Join-Path $existing "sentinel") -Value "sentinel"
+          $failed = $false
+          try { ./scripts/install-skills.ps1 -Target claude-project -All -ProjectRoot $root } catch { $failed = $true }
+          if (-not $failed) { throw "collision should fail" }
+          if ((Get-ChildItem (Join-Path $root ".claude/skills") -Directory).Count -ne 1) { throw "partial install occurred" }
+          if (-not (Test-Path (Join-Path $existing "sentinel"))) { throw "existing skill changed" }

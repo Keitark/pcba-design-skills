@@ -1,0 +1,4 @@
+interface:
+  display_name: "PCBA Fabrication Release"
+  short_description: "Build and verify a manufacturing release"
+  default_prompt: "Use $release-pcba-fabrication to build and verify one revision-consistent fabrication and assembly release."

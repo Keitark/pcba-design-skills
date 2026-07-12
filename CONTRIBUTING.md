@@ -1,37 +1,45 @@
-# Contributing / コントリビューション
+# Contributing
 
-Thank you for helping make schematics easier to review. 回路図を読みやすくする改善へのご協力、ありがとうございます。
+[日本語](CONTRIBUTING.ja.md)
 
-## Ground rules / 基本ルール
+## Ground rules
 
-- Keep the workflow EDA-neutral and place tool-specific behavior in the appropriate adapter documentation or skill resource.
-- Never weaken the distinction between exact connectivity validation and visually guided review.
-- Do not describe a cleaner drawing as electrically approved.
-- Use small, reproducible fixtures when examples are needed. Never contribute proprietary designs without permission.
-- Keep the skill concise; put extended adapter details in references rather than bloating `SKILL.md`.
+- Open or reuse an issue before non-trivial work; use a short issue-linked branch.
+- Keep each skill self-contained, its `SKILL.md` under 500 lines, and detailed
+  material in directly linked `references/`, `scripts/`, or `assets/`.
+- Keep executable skill instructions in English. Update paired English/Japanese
+  public guides together.
+- Keep workflow logic EDA-neutral and place tool-specific behavior behind an
+  explicit adapter with source, edit, render, validation, and limitation rules.
+- Never weaken connectivity, electrical, visual, DRC/power, release integrity,
+  CPL placement, or user-approval boundaries.
+- Use small synthetic fixtures for tests. Never contribute confidential designs,
+  credentials, account pages, or proprietary data.
+- Project learning belongs in `.pcba-workflow/`; propose a sanitized,
+  reproducible lesson upstream instead of making an installed skill self-modify.
 
-- ワークフロー本体は EDA 非依存にし、ツール固有の動作はアダプター資料またはスキルリソースへ配置してください。
-- 厳密な接続検証と目視ベースのレビューを混同しないでください。
-- 見やすくなった回路図を「電気的に承認済み」と表現しないでください。
-- 例には小さく再現可能なデータを使い、許可のない独自設計を含めないでください。
+## Development
 
-## Development workflow
-
-1. Search existing issues, then open a focused bug or feature request.
-2. Create a short-lived branch.
-3. Update English and Japanese documentation together when user-facing behavior changes.
-4. Run `python scripts/validate_repo.py` from the repository root.
-5. Test the skill against a disposable copy of a representative schematic.
-6. Include the input type, validation method, before/after render, and limitations in the pull request.
+1. Initialize new skill folders with OpenAI `skill-creator`.
+2. Add deterministic helpers before long procedural explanations.
+3. Run `PYTHONUTF8=1 python scripts/validate_repo.py`.
+4. Run the unit tests and install/smoke tests on disposable directories.
+5. Forward-test complex skill behavior with minimal raw context.
+6. Include test commands/results, risk, and representative visual evidence in
+   the pull request.
 
 ## Pull-request checklist
 
-- [ ] The skill triggers for the intended request without claiming unsupported tools.
-- [ ] Connectivity changes are prohibited by default or explicitly gated.
-- [ ] A source-of-truth rule is documented.
-- [ ] Exact validation is used only when the format/tooling supports it.
-- [ ] PDF/image-only output is marked visually guided and unverified.
-- [ ] English and Japanese user-facing pages remain aligned.
-- [ ] `python scripts/validate_repo.py` passes.
+- [ ] Trigger description is specific and does not collide with another skill.
+- [ ] Standalone installation contains every required local resource.
+- [ ] Exact validation is claimed only for supported evidence.
+- [ ] Circuit readability and correctness remain separate.
+- [ ] Raw/power connectivity and real DRC are not hidden by a zero-open summary.
+- [ ] Source CPL correction and complete preview review remain mandatory.
+- [ ] No private paths, credentials, account data, or tracked cache files exist.
+- [ ] English/Japanese guides and asset licensing are aligned.
+- [ ] Repository validation and tests pass.
 
-By contributing, you agree that your contribution is licensed under the repository's [MIT License](LICENSE).
+Contributions are MIT unless a file is explicitly listed under
+[asset licensing](ASSET-LICENSES.md). Do not add third-party assets without a
+compatible license and complete attribution.

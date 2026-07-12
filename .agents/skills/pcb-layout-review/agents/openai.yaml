@@ -1,0 +1,4 @@
+interface:
+  display_name: "PCB Layout Reviewer"
+  short_description: "Review placement, routing, planes, and DFM"
+  default_prompt: "Use $pcb-layout-review to audit this PCB layout and identify the safest measurable path to release."

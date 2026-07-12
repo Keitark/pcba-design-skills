@@ -1,0 +1,15 @@
+{
+  "schema": "pcba-release-manifest-v1",
+  "release": "example-rev-a",
+  "revision": "Rev A",
+  "status": "BLOCKED",
+  "artifacts": {},
+  "constraints": {},
+  "verification": {},
+  "approvals": {
+    "design_critical_substitution": "PENDING",
+    "assembly_placement": "PENDING",
+    "final_price": "PENDING",
+    "payment": "PENDING"
+  }
+}

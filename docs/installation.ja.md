@@ -2,120 +2,128 @@
 
 [English](installation.md) · [README に戻る](../README.ja.md)
 
-Schematic Humanizer は Codex スキルとして配布されます。リポジトリのルートではなく、スキルパッケージを配置してください。最終パスが `schematic-humanizer/SKILL.md` になれば正しい状態です。
+必要な 1 スキルだけ、または 8 スキル全部を導入できます。最終パスが必ず
+`<skill-name>/SKILL.md` になるようにしてください。リポジトリ全体を 1 個の
+スキルとして導入しないでください。
 
 ## 必要なもの
 
-- ローカルスキルに対応した Codex
-- リポジトリをクローンするための Git
-- 編集可能な出力が必要な場合は、入力形式に対応する EDA アプリまたはレンダラー
-- 回路設計のバックアップ、または破棄可能な作業ブランチ
+- ローカルスキル対応 Codex、またはスキル対応 Claude Code
+- クローン方式では Git
+- Codex システムインストーラー／検証スクリプトでは Python
+- 実作業に必要な EDA／ビューアー。スキル導入だけでは KiCad 等は入りません
 
-KiCad はテキスト形式のソースと CLI エクスポートにより強い自動検証ができるため、第一級対応です。他のツールは検証能力の異なるアダプターを使います。[アダプターガイド](adapters.ja.md)を確認してください。
+製造作業では `v1.0.0` に固定してください。`main` は未リリース版の評価用です。
 
-## 方法 A: プロジェクト単位でインストール
+## Codex: GitHub から 1 スキルを導入
 
-チームリポジトリで共通利用する場合や、プロジェクトごとにバージョンを固定したい場合に選びます。
-
-### PowerShell
-
-対象プロジェクトのルートで実行します。
-
-```powershell
-$source = Join-Path $env:TEMP "schematic-humanizer"
-git clone https://github.com/keitark/schematic-humanizer.git $source
-New-Item -ItemType Directory -Force ".agents\skills" | Out-Null
-Copy-Item -Recurse -Force "$source\.agents\skills\schematic-humanizer" ".agents\skills\"
-```
-
-### macOS / Linux
-
-対象プロジェクトのルートで実行します。
-
-```bash
-source_dir="$(mktemp -d)/schematic-humanizer"
-git clone https://github.com/keitark/schematic-humanizer.git "$source_dir"
-mkdir -p .agents/skills
-cp -R "$source_dir/.agents/skills/schematic-humanizer" .agents/skills/
-```
-
-配置結果:
+Codex へ次のように依頼するのが簡単です。
 
 ```text
-your-project/.agents/skills/schematic-humanizer/SKILL.md
+$skill-installer を使って、Keitark/pcba-design-skills の
+.agents/skills/schematic-humanizer を v1.0.0 に固定して
+schematic-humanizer としてインストールしてください。
 ```
 
-チームで同じバージョンをリポジトリに保存したい場合のみ、スキル本体をコミットしてください。外部ファイルの同梱に関する組織ルールも確認してください。
-
-## 方法 B: 個人用としてインストール
-
-複数のプロジェクトで利用する場合に選びます。
-
-### PowerShell
+同等の PowerShell コマンド:
 
 ```powershell
-$source = Join-Path $env:TEMP "schematic-humanizer"
 $codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME ".codex" }
-git clone https://github.com/keitark/schematic-humanizer.git $source
-New-Item -ItemType Directory -Force (Join-Path $codexHome "skills") | Out-Null
-Copy-Item -Recurse -Force "$source\.agents\skills\schematic-humanizer" (Join-Path $codexHome "skills")
+$installer = Join-Path $codexHome "skills\.system\skill-installer\scripts\install-skill-from-github.py"
+python $installer --repo Keitark/pcba-design-skills --ref v1.0.0 `
+  --path .agents/skills/schematic-humanizer
 ```
 
-### macOS / Linux
+macOS/Linux:
 
 ```bash
-source_dir="$(mktemp -d)/schematic-humanizer"
-codex_home="${CODEX_HOME:-$HOME/.codex}"
-git clone https://github.com/keitark/schematic-humanizer.git "$source_dir"
-mkdir -p "$codex_home/skills"
-cp -R "$source_dir/.agents/skills/schematic-humanizer" "$codex_home/skills/"
+installer="${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py"
+python "$installer" --repo Keitark/pcba-design-skills --ref v1.0.0 \
+  --path .agents/skills/schematic-humanizer
 ```
 
-配置結果:
+既存の導入先がある場合、インストーラーは停止します。更新時は古いディレクトリを
+明示的に退避または削除し、複数バージョンを混ぜないでください。
 
-```text
-$CODEX_HOME/skills/schematic-humanizer/SKILL.md
+## Codex: 8 スキルを個人用に一括導入
+
+```powershell
+$codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME ".codex" }
+$installer = Join-Path $codexHome "skills\.system\skill-installer\scripts\install-skill-from-github.py"
+python $installer --repo Keitark/pcba-design-skills --ref v1.0.0 `
+  --path .agents/skills/manage-pcba-program `
+         .agents/skills/plan-electronic-product `
+         .agents/skills/qualify-pcba-sourcing `
+         .agents/skills/design-and-review-circuit `
+         .agents/skills/schematic-humanizer `
+         .agents/skills/pcb-layout-review `
+         .agents/skills/release-pcba-fabrication `
+         .agents/skills/operate-jlcpcb-order
 ```
 
-`CODEX_HOME` が未設定の場合、上記の `$CODEX_HOME` は `~/.codex` を意味します。
+導入後は新しい Codex タスクを開いてください。次のターンから利用できます。
 
-## 有効化と確認
+## クローン方式: Codex / Claude Code
 
-インストール後、新しい Codex タスクを開始して次のように依頼します。
+```powershell
+git clone --branch v1.0.0 --depth 1 https://github.com/Keitark/pcba-design-skills.git
+Set-Location pcba-design-skills
+```
+
+PowerShell:
+
+```powershell
+# 個人用 Codex に 1 スキル
+.\scripts\install-skills.ps1 -Target codex-personal -Skills schematic-humanizer
+
+# 指定プロジェクトの .agents/skills に全部
+.\scripts\install-skills.ps1 -Target codex-project -All -ProjectRoot C:\path\to\project
+
+# 個人用 Claude Code に 1 スキル
+.\scripts\install-skills.ps1 -Target claude-personal -Skills schematic-humanizer
+
+# 指定プロジェクトの .claude/skills に全部
+.\scripts\install-skills.ps1 -Target claude-project -All -ProjectRoot C:\path\to\project
+```
+
+macOS/Linux:
+
+```bash
+./scripts/install-skills.sh codex-personal schematic-humanizer
+./scripts/install-skills.sh codex-project --project /path/to/project --all
+./scripts/install-skills.sh claude-personal schematic-humanizer
+./scripts/install-skills.sh claude-project --project /path/to/project --all
+```
+
+Claude Code の個人用は `~/.claude/skills/<name>/SKILL.md`、プロジェクト用は
+`.claude/skills/<name>/SKILL.md` です。`/schematic-humanizer` のように実行します。
+公式の [Claude Code skill / slash command ドキュメント](https://code.claude.com/docs/en/slash-commands)
+も参照してください。Codex では `$schematic-humanizer` を使います。
+
+## 動作確認
 
 ```text
 $schematic-humanizer を使って、このプロジェクトの回路図ソースを確認し、
-安全に読みやすくする計画を説明してください。まだファイルは編集しないでください。
+安全な可読性改善計画を説明してください。まだ編集しないでください。
 ```
 
-正しく動作すると、最初に入力形式、正本ルール、使用可能なレンダー／エクスポート手段、厳密な接続検証が可能かを確認します。電気的な承認を約束してはいけません。
+全部を確認する場合:
 
-## 更新
+```text
+$manage-pcba-program を使って、電子回路プロジェクトの入力を調査し、
+program-state を初期化し、不足している専門証拠を示してください。
+編集前に停止してください。
+```
 
-リポジトリの最新版を取得し、インストール済みの `schematic-humanizer` ディレクトリだけを置き換えます。その後、新しい Codex タスクを開始してください。
+正しい動作では、正本、証拠レベル、利用可能なツール、不足ゲートを特定し、
+勝手に回路合格や発注を行いません。
 
-同じディレクトリへ異なるバージョンを混在させないでください。古い参照ファイルが残ると動作が不整合になる可能性があります。
+## 更新・削除
 
-## アンインストール
+新しいタグをクローンし、選択したスキルディレクトリだけを置き換えます。製造中の
+プロジェクトではリリースノートを確認してください。
 
-インストールした次のディレクトリだけを削除します。
+削除時は導入したスキルディレクトリだけを削除します。過去に変更された設計ファイルは
+戻らないため、Git またはバックアップを使ってください。
 
-- プロジェクト単位: `.agents/skills/schematic-humanizer`
-- 個人用: `$CODEX_HOME/skills/schematic-humanizer`。未設定の場合は `~/.codex/skills/schematic-humanizer`
-
-この操作では、Codex が過去に変更した回路図ファイルは元に戻りません。バージョン管理履歴またはバックアップを使って戻してください。
-
-## トラブルシューティング
-
-### Codex がスキルを認識しない
-
-- `SKILL.md` が `schematic-humanizer` ディレクトリ直下にあるか確認します。
-- `schematic-humanizer/schematic-humanizer/SKILL.md` のように二重になっていないか確認します。
-- インストール後に新しいタスクを開始します。
-- 個人用とプロジェクト用が両方ある場合、バージョン固定が必要ならプロジェクト用を優先します。
-
-### 対象 EDA ツールを利用できない
-
-可能であれば、ネイティブツールからネットリストと PDF/SVG を出力してください。編集可能なソースまたは信頼できるネットリストがない場合、スキルは目視ベースのワークフローを使う必要があり、接続維持を証明できません。
-
-困ったときは [SUPPORT.ja.md](../SUPPORT.ja.md) を参照してください。
+問題がある場合は [SUPPORT.ja.md](../SUPPORT.ja.md) を参照してください。

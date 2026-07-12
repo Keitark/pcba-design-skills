@@ -1,0 +1,4 @@
+interface:
+  display_name: "Circuit Design Reviewer"
+  short_description: "Audit circuit architecture and electrical safety"
+  default_prompt: "Use $design-and-review-circuit to audit this circuit, its operating states, and its layout-facing constraints."
