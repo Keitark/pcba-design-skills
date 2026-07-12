@@ -1,0 +1,4 @@
+interface:
+  display_name: "Electronic Product Planner"
+  short_description: "Turn a product idea into engineering inputs"
+  default_prompt: "Use $plan-electronic-product to turn this product description into a reviewable electronic-product brief and architecture."

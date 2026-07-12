@@ -6,15 +6,15 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve Schematic Humanizer. Remove confidential design data before attaching files.
+        Thanks for helping improve PCBA Design Skills. Remove confidential design, account, and order data before attaching files.
         ご協力ありがとうございます。添付前に機密設計データを除去してください。
 
   - type: input
     id: environment
     attributes:
       label: Environment / 環境
-      description: OS, Codex surface/version, EDA tool and version / OS、Codex、EDA ツールとバージョン
-      placeholder: Windows 11, Codex Desktop, KiCad 10.0
+      description: OS, Codex or Claude Code version, skill, EDA tool and version / OS、agent、スキル、EDA ツール
+      placeholder: Windows 11, Codex Desktop, pcb-layout-review, KiCad 10.0
     validations:
       required: true
 
@@ -31,6 +31,10 @@ body:
         - SPICE or standalone netlist
         - PDF or image only
         - Documentation or installation
+        - Product brief or architecture
+        - BOM or sourcing lock
+        - PCB or manufacturing release
+        - JLCPCB quote or placement preview
         - Other
     validations:
       required: true

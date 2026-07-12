@@ -1,0 +1,4 @@
+interface:
+  display_name: "PCBA Program Manager"
+  short_description: "Coordinate an evidence-gated PCBA workflow"
+  default_prompt: "Use $manage-pcba-program to coordinate this electronics project from available inputs through the required review gates."

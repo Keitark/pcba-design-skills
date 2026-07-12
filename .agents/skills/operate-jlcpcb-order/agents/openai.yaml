@@ -1,0 +1,4 @@
+interface:
+  display_name: "JLCPCB Order Operator"
+  short_description: "Review and operate a gated JLCPCB order"
+  default_prompt: "Use $operate-jlcpcb-order to review this released PCB and prepare its JLCPCB order without crossing approval gates."

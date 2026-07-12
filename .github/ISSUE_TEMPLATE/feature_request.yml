@@ -1,5 +1,5 @@
 name: Feature or adapter request / 機能・アダプター提案
-description: Suggest a workflow improvement or source-format adapter / ワークフロー改善や入力形式対応を提案
+description: Suggest a skill, workflow, contract, validation, or adapter improvement / スキル・検証・アダプター改善を提案
 title: "[Feature] "
 labels: [enhancement]
 body:
@@ -14,8 +14,8 @@ body:
   - type: input
     id: tool
     attributes:
-      label: EDA tool or source type / EDA ツール・入力形式
-      placeholder: Altium Designer 25, EasyEDA Pro, SPICE, scanned PDF...
+      label: Skill, EDA tool, or source type / スキル・EDA ツール・入力形式
+      placeholder: pcb-layout-review, Altium Designer 25, SPICE, JLCPCB CPL...
     validations:
       required: true
 

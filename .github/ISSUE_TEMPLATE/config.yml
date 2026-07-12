@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Support guide / サポートガイド
-    url: https://github.com/keitark/schematic-humanizer/blob/main/SUPPORT.md
+    url: https://github.com/Keitark/pcba-design-skills/blob/main/SUPPORT.md
     about: Read the evidence checklist before opening an issue / Issue 作成前に必要情報を確認
   - name: Japanese support / 日本語サポート
-    url: https://github.com/keitark/schematic-humanizer/blob/main/SUPPORT.ja.md
+    url: https://github.com/Keitark/pcba-design-skills/blob/main/SUPPORT.ja.md
     about: 日本語のサポート案内

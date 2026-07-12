@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "skill": {"type": "string"},
+    "source_of_truth": {"type": "string"},
+    "connectivity_evidence": {"type": "string"},
+    "will_edit": {"type": "boolean"},
+    "electrical_approval": {"type": "boolean"},
+    "visual_checks": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "required": [
+    "skill",
+    "source_of_truth",
+    "connectivity_evidence",
+    "will_edit",
+    "electrical_approval",
+    "visual_checks",
+    "limitations"
+  ]
+}

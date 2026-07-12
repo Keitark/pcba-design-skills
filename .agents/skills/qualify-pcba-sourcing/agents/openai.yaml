@@ -1,0 +1,4 @@
+interface:
+  display_name: "PCBA Sourcing Qualifier"
+  short_description: "Verify parts, packages, stock, and cost"
+  default_prompt: "Use $qualify-pcba-sourcing to verify this BOM and create a sourcing lock before design freeze."

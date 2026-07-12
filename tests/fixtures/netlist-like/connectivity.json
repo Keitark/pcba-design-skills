@@ -1,0 +1,23 @@
+{
+  "schema": "schematic-connectivity-v1",
+  "components": [
+    {"ref": "J1", "value": "POWER", "footprint": "", "device": "Connector"},
+    {"ref": "U1", "value": "MCU", "footprint": "", "device": "MCU"},
+    {"ref": "U2", "value": "3V3_LDO", "footprint": "", "device": "Regulator"},
+    {"ref": "U3", "value": "TEMP", "footprint": "", "device": "Sensor"},
+    {"ref": "J2", "value": "PROGRAM", "footprint": "", "device": "Connector"},
+    {"ref": "R1", "value": "TBD", "footprint": "", "device": "Resistor"},
+    {"ref": "LED1", "value": "STATUS", "footprint": "", "device": "LED"}
+  ],
+  "nets": [
+    {"name": "5V_IN", "pins": [{"ref": "J1", "pin": "1"}, {"ref": "U2", "pin": "IN"}]},
+    {"name": "+3V3", "pins": [{"ref": "U2", "pin": "OUT"}, {"ref": "U1", "pin": "VCC"}, {"ref": "U3", "pin": "VCC"}, {"ref": "J2", "pin": "1"}]},
+    {"name": "GND", "pins": [{"ref": "J1", "pin": "2"}, {"ref": "U2", "pin": "GND"}, {"ref": "U1", "pin": "GND"}, {"ref": "U3", "pin": "GND"}, {"ref": "J2", "pin": "4"}, {"ref": "LED1", "pin": "K"}]},
+    {"name": "I2C_SCL", "pins": [{"ref": "U1", "pin": "SCL"}, {"ref": "U3", "pin": "SCL"}]},
+    {"name": "I2C_SDA", "pins": [{"ref": "U1", "pin": "SDA"}, {"ref": "U3", "pin": "SDA"}]},
+    {"name": "PROG_TX", "pins": [{"ref": "U1", "pin": "TX"}, {"ref": "J2", "pin": "2"}]},
+    {"name": "PROG_RX", "pins": [{"ref": "U1", "pin": "RX"}, {"ref": "J2", "pin": "3"}]},
+    {"name": "LED_DRIVE", "pins": [{"ref": "U1", "pin": "LED"}, {"ref": "R1", "pin": "1"}]},
+    {"name": "LED_A", "pins": [{"ref": "R1", "pin": "2"}, {"ref": "LED1", "pin": "A"}]}
+  ]
+}
