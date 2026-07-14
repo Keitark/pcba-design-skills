@@ -37,7 +37,7 @@ Every stage has explicit evidence and invalidation rules.
 | [`qualify-pcba-sourcing`](.agents/skills/qualify-pcba-sourcing/SKILL.md) | Exact MPN, package, stock, cost, CAD, and substitution review | `sourcing-lock.csv` |
 | [`design-and-review-circuit`](.agents/skills/design-and-review-circuit/SKILL.md) | Circuit correctness, power, timing, states, protection, and constraints | `circuit-review.md` |
 | [`schematic-humanizer`](.agents/skills/schematic-humanizer/SKILL.md) | Visible wiring, buses, functional sheets, overlap removal, and visual QA | readable source, PDF/PNG, connectivity comparison |
-| [`pcb-layout-review`](.agents/skills/pcb-layout-review/SKILL.md) | Placement, routing, references, planes, DRC, mechanics, and DFM | `layout-review.json`, experiment ledger |
+| [`pcb-layout-review`](.agents/skills/pcb-layout-review/SKILL.md) | Placement, derivative variants, routing, references, planes, DRC, mechanics, and DFM | `layout-review.json`, experiment ledger |
 | [`release-pcba-fabrication`](.agents/skills/release-pcba-fabrication/SKILL.md) | Revision-consistent Gerber, drill, BOM, CPL, and release evidence | `release-manifest.json` |
 | [`operate-jlcpcb-order`](.agents/skills/operate-jlcpcb-order/SKILL.md) | JLCPCB quote, matching, CPL preview, cost, cart, and approval gates | placement/quote/order records |
 

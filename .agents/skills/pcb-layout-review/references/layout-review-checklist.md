@@ -2,6 +2,10 @@
 
 ## Placement freeze
 
+- For a derivative board, donor hashes and an explicit electrical/mechanical
+  delta exist before placement reuse.
+- Connector pitch, mating datum, fingers/tongue, insertion envelope, shell
+  features, and allowed growth direction are independently verified.
 - Connector pin order and functional corridors match architecture.
 - Protection, translators, buffers, memory, processing, and outputs do not
   backtrack unnecessarily.
@@ -51,3 +55,8 @@
   model, rotation, or position change.
 - Missing or offset bodies, wrong pin 1/polarity, unsupported connectors, or
   mechanical collisions block release even when copper DRC is clean.
+- Donor/variant size comparisons use one orthographic scale with explicit
+  dimensions; independently fitted screenshots are rejected.
+- Silk-over-silk, silk-over-copper, and edge-clearance findings are normalized
+  and visually classified. Critical markings remain readable, and unresolved
+  dense labels are `USER_REVIEW`, not silently deleted.

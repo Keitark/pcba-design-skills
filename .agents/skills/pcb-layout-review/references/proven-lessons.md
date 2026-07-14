@@ -20,3 +20,18 @@
   artifacts, and compare the new quote.
 - Supplier placement preview is not PCB placement validation. It is a separate
   post-release interpretation requiring machine and visual review.
+- Treat a connector, enclosure, platform, or regional derivative as an
+  electrical-and-mechanical constraint remap, not a cropped parent layout.
+- Preserve the mating-edge datum, fingers, tongue, and insertion keepouts. Add
+  board area only in a direction verified against the host and enclosure.
+- Reuse functional topology and physical pin-bank orientation rather than
+  absolute donor coordinates; repeat every placement and reference-path gate.
+- Import coupled corridor repairs atomically. Never cherry-pick the headline
+  net from a donor that also displaced neighboring lanes.
+- When an autorouter omits a target route, inspect target pins, fixed/movable
+  scopes, and result occurrences before changing normalization or retry flags.
+- Compare derivative boards at one orthographic physical scale. Independently
+  fitted renders cannot prove relative dimensions or mechanical fit.
+- Close layout review with normalized silkscreen checks and both-side visual
+  evidence. Preserve polarity/pin-1 meaning and classify intentional connector
+  overhang separately from fabrication defects.
