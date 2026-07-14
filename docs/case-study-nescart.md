@@ -60,7 +60,34 @@ clearance errors. Final completion required zero raw disconnects, zero real DRC,
 zero signal splits, zero power disconnects, and zero automated layout failures
 in the same saved board/project state.
 
-## 4. Fabrication cost and sourcing feedback
+## 4. Porting the design from NES to Famicom
+
+The mature 72-pin NES design was reused to build a 60-pin Famicom-native
+variant. This was not a cropped board: the connector pitch/order, audio loop,
+removed CIC subsystem, shell geometry, tongue, and usable area were written as
+an explicit electrical/mechanical delta first. The mating edge remained fixed;
+extra height was added only away from the fingers after a separate fit gate was
+defined.
+
+Placement reused functional blocks and physical pin-bank direction rather than
+absolute coordinates. A trapped address route required four neighboring nets
+to be imported atomically, and an apparent autorouter normalization failure was
+traced instead to 2,153 fixed routing scopes and zero movable scopes. Same-scale
+renders showed the nominal NES and Famicom envelopes as approximately
+99.7 x 63.9 mm and 90.0 x 66.8 mm respectively, both at 1.2 mm thickness.
+
+The promoted Famicom board simultaneously reached zero raw disconnects, real
+DRC errors, power disconnects, and layout failures. Silkscreen was then audited
+as a separate release surface: a conservative candidate reduced 58 normalized
+findings to six without changing the electrical gates, while dense labels and
+intentional connector overhang remained explicit review items.
+
+The reusable workflow is in the
+[`pcb-layout-review` variant-porting reference](../.agents/skills/pcb-layout-review/references/variant-porting.md).
+Its measured layer count, via geometry, and dimensions remain case-study facts,
+not defaults for other derivative boards.
+
+## 5. Fabrication cost and sourcing feedback
 
 A live quote showed that small mechanical drills activated a costly capability
 tier. The board was not globally weakened: only clearance-verified vias were
@@ -72,7 +99,7 @@ review before ordering. The reusable rule is to lock exact MPN, pin semantics,
 package drawing, footprint, CAD/3D model, availability, and total order impact
 before placement freeze—not after routing.
 
-## 5. CPL registration and visual placement
+## 6. CPL registration and visual placement
 
 The supplier preview revealed both position and rotation interpretation issues.
 SRAMs, logic packages, the ESP32 module, and regulator were inspected at useful

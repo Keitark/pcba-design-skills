@@ -48,7 +48,30 @@ loader、電源/USB、CIC/reset の配置方針にしました。
 raw disconnect 0、real DRC 0、signal split 0、power disconnect 0、layout fail 0
 を要求しました。
 
-## 4. 製造費と部品調達のフィードバック
+## 4. NES 版から Famicom 版への派生移植
+
+完成度の高い 72 pin NES 版から、60 pin Famicom 専用版を作りました。ただし
+基板を単純に切り詰めたのではありません。connector の pitch／順序、audio loop、
+不要になる CIC、shell、tongue、使用可能面積を電気・機構差分として先に固定。
+挿入側の基準は維持し、追加面積は fit gate を定義したうえで finger と反対側だけ
+に伸ばしました。
+
+配置は絶対座標ではなく、機能 block と実 pin bank の向きを再利用しました。
+詰まった address 配線は隣接 4 net を一体で取り込む必要があり、autorouter の
+normalization 警告に見えた失敗も、実際は fixed scope 2,153、movable scope 0 が
+原因でした。同一縮尺 render では、公称外形は NES 約 99.7 x 63.9 mm、Famicom
+約 90.0 x 66.8 mm、どちらも厚さ 1.2 mm と比較できました。
+
+昇格した Famicom 版は、raw disconnect、real DRC、power disconnect、layout fail
+を同時に 0 にしました。その後 silkscreen を別の release 面として監査し、電気
+gate を変えずに指摘 58 件を 6 件へ削減。高密度 label と意図的な connector
+overhang は消さず、明示的な review 項目として残しました。
+
+再利用手順は
+[`pcb-layout-review` の派生移植 reference](../.agents/skills/pcb-layout-review/references/variant-porting.md)
+にあります。層数、via、寸法はこの実例の値であり、他基板の既定値ではありません。
+
+## 5. 製造費と部品調達のフィードバック
 
 実見積で小径 mechanical drill が高価な工程を発動。全ビアを乱暴に変更せず、
 全層 clearance を確認できた場所だけ標準化し、接続、DRC、plane、drill、Gerber、
@@ -57,7 +80,7 @@ manifest、再見積を繰り返しました。
 memory の調達とパッケージ情報も発注直前に問題化したため、今後は MPN、pin、
 package drawing、footprint、CAD/3D、在庫、総費用を配置固定前に lock します。
 
-## 5. CPL の位置・回転・物理 pad
+## 6. CPL の位置・回転・物理 pad
 
 実装プレビューで SRAM、logic、ESP32 module、regulator の X/Y と回転解釈を確認。
 同じ電気 pad 番号を持つ端子、tab、supplier alias を平均せず、物理 instance 単位

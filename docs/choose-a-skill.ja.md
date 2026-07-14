@@ -11,7 +11,7 @@
 | BOM、高価／入手不能部品、パッケージ相談 | `qualify-pcba-sourcing` | 回路要件と数量が分かる |
 | 回路図／ネットリストが正しいか監査 | `design-and-review-circuit` | 製品動作と正確な部品情報がある |
 | ラベル過多、重なり、浮いて見える回路図 | `schematic-humanizer` | 電気変更なしで表示を改善する |
-| PCB 配置、配線、層、open、DRC | `pcb-layout-review` | 回路制約とネイティブ PCB がある |
+| PCB 配置、配線、派生コネクタ／筐体、層、open、DRC | `pcb-layout-review` | 回路制約、対象機構、ネイティブ PCB がある |
 | Gerber、ドリル、BOM、CPL を発注用に統一 | `release-pcba-fabrication` | 上流の回路・レイアウトが合格済み |
 | リリース済みデータと JLCPCB 画面 | `operate-jlcpcb-order` | 不変リリースと承認ゲートがある |
 | 複数段階、説明から発注レビューまで | `manage-pcba-program` と必要な全専門スキル | 必要な専門スキルが導入済み |

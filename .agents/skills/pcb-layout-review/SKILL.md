@@ -1,6 +1,6 @@
 ---
 name: pcb-layout-review
-description: Audit or finish PCB placement and routing using circuit intent, mechanical constraints, sourcing evidence, native DRC/connectivity, rendered views, and manufacturing feedback. Use before routing, after autorouting, before fabrication release, or when reviewing layers, GND references, power distribution, decoupling, buses, controlled interfaces, RF keepouts, vias, cost-driving features, opens, or DRC findings.
+description: Audit, finish, or port PCB placement and routing using circuit intent, mechanical constraints, sourcing evidence, native DRC/connectivity, rendered views, and manufacturing feedback. Use before routing, after autorouting, before fabrication release, when adapting a proven board to another connector, enclosure, platform, or regional variant, or when reviewing layers, GND references, power distribution, decoupling, buses, controlled interfaces, RF keepouts, vias, cost-driving features, opens, or DRC findings.
 ---
 
 # PCB Layout Reviewer
@@ -12,6 +12,8 @@ and [references/proven-lessons.md](references/proven-lessons.md). Record the
 gate with [references/layout-review-record.md](references/layout-review-record.md)
 and select an evidence path from
 [references/eda-adapters.md](references/eda-adapters.md).
+For a derivative board, also read
+[references/variant-porting.md](references/variant-porting.md).
 
 ## Establish truth
 
@@ -27,6 +29,25 @@ and select an evidence path from
 4. Distinguish hard constraints from negotiable targets. Never trade a short,
    new open, corrupted return path, unsupported pad, keepout violation, unsafe
    ownership state, or fabrication violation for a better score.
+
+## Port a derivative variant
+
+1. Freeze and hash the proven donor. Write an explicit delta for connector pin
+   order and pitch, removed/added functions, power and audio paths, outline,
+   mating datum, tongue, shell features, keepouts, and assembly constraints.
+2. Treat the port as a constraint remap, not a crop, scale, or pin-count swap.
+   Preserve the mating edge and add area only in a mechanically verified
+   direction.
+3. Reuse functional blocks, pin-bank orientation, local support relationships,
+   and proven topology rather than absolute coordinates. Re-run architecture,
+   mechanics, power/reference, and placement gates on the variant.
+4. Geometry-lock every candidate. Integrate a coupled corridor donor as one
+   atomic net set and prove every displaced or non-whitelisted net.
+5. Diagnose an autorouter from its actual input/output: verify target pins,
+   fixed versus movable scopes, target-route occurrences, and whether the
+   minimum blocker was allowed to move.
+6. Compare donor and variant with one orthographic physical scale and explicit
+   dimensions. Independently fitted screenshots are not size evidence.
 
 ## Review in order
 
@@ -53,6 +74,9 @@ and select an evidence path from
 7. **Independent visual pass:** inspect clean 2D views, each signal layer, and
    fresh top/bottom 3D renders. Verify bodies, pin 1, polarity, connector
    overhang, pad support, antenna, outline, keepouts, silkscreen, and mechanics.
+   Run silk-over-silk, silk-over-copper, and edge-clearance checks before the
+   visual pass; preserve pin-1, polarity, and functional meaning, and leave
+   unresolved dense labels at `USER_REVIEW`.
 
 ## Experiment safely
 
@@ -65,13 +89,15 @@ project-specific lessons with `scripts/record_lesson.py`. Both default to
 Prefer high-scoring applicable methods. Do not repeat a negative method unless
 conditions materially changed. An accepted candidate must be a measured net
 improvement and may not add opens, real DRC, power disconnects, or verified
-manufacturing defects.
+manufacturing defects. A successful route for one trapped net is not promotable
+when its coupled donor set is incomplete or another lane becomes stranded.
 
 ## Release gate
 
 Require zero unexplained raw disconnects, zero real DRC errors, zero power
 disconnects, all project layout checks passing, verified planes/critical nets,
-and visual/mechanical PASS in the same saved board/project state. Document only
-narrow, evidence-backed waivers in `.pcba-workflow/layout-review.json`. Hand the result to
+and visual/mechanical/silkscreen PASS in the same saved board/project state.
+Document only narrow, evidence-backed waivers in
+`.pcba-workflow/layout-review.json`. Hand the result to
 `$release-pcba-fabrication`; supplier CPL interpretation remains a separate
 `$operate-jlcpcb-order` gate.
