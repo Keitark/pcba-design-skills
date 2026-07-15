@@ -21,6 +21,13 @@ and directories for public frames, private evidence, and design snapshots.
 The log is sequence-checked and hash-chained; referenced artifacts are checked
 again when the session closes.
 
+Files passed with `--input` or `--output` are copied automatically into an
+immutable, sequence-scoped checkpoint below `.pcba-workflow/snapshots/`. The
+event also records the original relative path. You can therefore continue
+editing the working product brief, program state, schematic, or layout without
+invalidating earlier checkpoints. Do not edit or remove the generated snapshot
+copies.
+
 ## Recommended story beats
 
 1. Product brief and architecture.

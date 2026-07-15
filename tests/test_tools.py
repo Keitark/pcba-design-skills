@@ -667,10 +667,20 @@ class ToolTests(unittest.TestCase):
                 "--output", report, "--frame", frame, cwd=root,
             )
             self.assertEqual(added.returncode, 0, added.stdout + added.stderr)
+            event = json.loads((root / ".pcba-workflow/events.jsonl").read_text(encoding="utf-8"))
+            self.assertEqual(event["outputs"][0]["source_path"],
+                             ".pcba-workflow/snapshots/connectivity.json")
+            self.assertNotEqual(event["outputs"][0]["path"],
+                                event["outputs"][0]["source_path"])
             validated = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
             self.assertEqual(validated.returncode, 0, validated.stdout + validated.stderr)
             closed = run(script, "--root", ".pcba-workflow", "close", cwd=root)
             self.assertEqual(closed.returncode, 0, closed.stdout + closed.stderr)
+
+            report.write_text('{"status":"UPDATED"}\n', encoding="utf-8")
+            source_changed = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
+            self.assertEqual(source_changed.returncode, 0,
+                             source_changed.stdout + source_changed.stderr)
 
             frame.write_bytes(b"edited after close")
             drifted = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
@@ -693,20 +703,55 @@ class ToolTests(unittest.TestCase):
                 "--tool", "plan-electronic-product", "--caption-en", "Product brief",
                 "--output", artifact, cwd=root,
             ).returncode, 0)
-            artifact.unlink()
+            event_path = root / ".pcba-workflow/events.jsonl"
+            event = json.loads(event_path.read_text(encoding="utf-8"))
+            snapshot = root / event["outputs"][0]["path"]
+            snapshot.unlink()
             missing = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
             self.assertNotEqual(missing.returncode, 0)
             self.assertIn("missing outputs artifact", missing.stdout)
 
-            artifact.write_text("evidence", encoding="utf-8")
-            event_path = root / ".pcba-workflow/events.jsonl"
-            event = json.loads(event_path.read_text(encoding="utf-8"))
+            snapshot.write_text("evidence", encoding="utf-8")
             event["sequence"] = 3
             event_path.write_text(json.dumps(event) + "\n", encoding="utf-8")
             gap = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
             self.assertNotEqual(gap.returncode, 0)
             self.assertIn("sequence must be 1", gap.stdout)
             self.assertIn("event hash mismatch", gap.stdout)
+
+    def test_workflow_record_snapshots_mutable_inputs_and_outputs(self) -> None:
+        script = ROOT / ".agents/skills/manage-pcba-program/scripts/workflow_record.py"
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.assertEqual(run(
+                script, "--root", ".pcba-workflow", "init", "--project", "fixture",
+                cwd=root,
+            ).returncode, 0)
+            source_input = root / "program-state.json"
+            source_output = root / "architecture.md"
+            source_input.write_text('{"status":"BLOCKED"}\n', encoding="utf-8")
+            source_output.write_text("# Draft\n", encoding="utf-8")
+            added = run(
+                script, "--root", ".pcba-workflow", "add",
+                "--stage", "product_definition", "--action", "capture-draft",
+                "--tool", "plan-electronic-product", "--caption-en", "Draft architecture",
+                "--input", source_input, "--output", source_output, cwd=root,
+            )
+            self.assertEqual(added.returncode, 0, added.stdout + added.stderr)
+            event = json.loads((root / ".pcba-workflow/events.jsonl").read_text(encoding="utf-8"))
+            self.assertEqual(event["inputs"][0]["source_path"], "program-state.json")
+            self.assertEqual(event["outputs"][0]["source_path"], "architecture.md")
+
+            source_input.unlink()
+            source_output.write_text("# Revised\n", encoding="utf-8")
+            validated = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
+            self.assertEqual(validated.returncode, 0, validated.stdout + validated.stderr)
+
+            checkpoint = root / event["outputs"][0]["path"]
+            checkpoint.write_text("tampered\n", encoding="utf-8")
+            tampered = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
+            self.assertNotEqual(tampered.returncode, 0)
+            self.assertIn("hash mismatch", tampered.stdout)
 
     def test_workflow_record_rejects_public_private_identifiers(self) -> None:
         script = ROOT / ".agents/skills/manage-pcba-program/scripts/workflow_record.py"
