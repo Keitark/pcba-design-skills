@@ -20,6 +20,9 @@ status.
    approval.
 4. Initialize or validate `.pcba-workflow/program-state.json` with
    `scripts/program_state.py`.
+5. When the user requests a timelapse, tutorial, case study, or recorded demo,
+   read [references/recorded-workflow.md](references/recorded-workflow.md) and
+   initialize the hash-chained event log before the first design action.
 
 ## Route the work
 
@@ -51,6 +54,10 @@ before placement freeze.
   separate. Approval at one gate never implies another.
 - Respect user intent: review-only requests do not authorize design edits,
   browser mutations, cart changes, or payments.
+- In recorded mode, append events only after saved, inspectable checkpoints.
+  Keep promotion-safe frames separate from private evidence, record authentic
+  failures and corrections without staging fake defects, and validate hashes
+  after every stage.
 - Stop on contradictory revisions, missing source-of-truth data, unverifiable
   safety assumptions, or a specialist BLOCKED result.
 
@@ -59,3 +66,5 @@ before placement freeze.
 Report current gate, completed evidence, invalidated work, unresolved risks,
 required user reviews, and the next specialist. A program is complete only
 when the requested terminal gate is PASS and no required work remains.
+For a pre-order demo, finish at `order_stop: USER_REVIEW`, validate and close
+the recording, and do not cross its declared `stop_before` boundary.

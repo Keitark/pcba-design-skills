@@ -15,7 +15,7 @@
 [![English](https://img.shields.io/badge/docs-English-8b5cf6.svg)](README.md)
 [![日本語](https://img.shields.io/badge/docs-日本語-e85d75.svg)](README.ja.md)
 
-[日本語](README.ja.md) · [Choose a skill](docs/choose-a-skill.md) · [Install](docs/installation.md) · [Prompts](docs/prompts.md) · [nescart case study](docs/case-study-nescart.md)
+[日本語](README.ja.md) · [Choose a skill](docs/choose-a-skill.md) · [Install](docs/installation.md) · [Prompts](docs/prompts.md) · [Record a demo](docs/recorded-workflow.md) · [nescart case study](docs/case-study-nescart.md)
 
 </div>
 
@@ -98,6 +98,10 @@ through an order-ready manufacturing release.
 
 For focused requests and Japanese examples, use the
 [copy-paste prompt guide](docs/prompts.md).
+
+To preserve a netlist-to-humanized-schematic transformation, layout progress,
+PCBA placement correction, quote/coupon review, and a safe stop immediately
+before order submission, use the [recorded workflow guide](docs/recorded-workflow.md).
 
 ## Safety and evidence
 

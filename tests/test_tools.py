@@ -645,6 +645,87 @@ class ToolTests(unittest.TestCase):
             self.assertNotEqual(nonfinite.returncode, 0)
             self.assertIn("must be finite", nonfinite.stdout)
 
+    def test_workflow_record_valid_chain_close_and_hash_drift(self) -> None:
+        script = ROOT / ".agents/skills/manage-pcba-program/scripts/workflow_record.py"
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            frame = root / ".pcba-workflow/frames/001-before.png"
+            report = root / ".pcba-workflow/snapshots/connectivity.json"
+            initialized = run(
+                script, "--root", ".pcba-workflow", "init",
+                "--project", "fixture", "--stop-before", "final-submit", cwd=root,
+            )
+            self.assertEqual(initialized.returncode, 0, initialized.stdout + initialized.stderr)
+            frame.write_bytes(b"safe public frame")
+            report.write_text('{"status":"PASS"}\n', encoding="utf-8")
+            added = run(
+                script, "--root", ".pcba-workflow", "add",
+                "--stage", "schematic_netlist", "--action", "capture-before",
+                "--tool", "schematic-humanizer", "--gate-status", "PASS",
+                "--caption-en", "Raw netlist-style schematic",
+                "--caption-ja", "ネットリスト風回路図",
+                "--output", report, "--frame", frame, cwd=root,
+            )
+            self.assertEqual(added.returncode, 0, added.stdout + added.stderr)
+            validated = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
+            self.assertEqual(validated.returncode, 0, validated.stdout + validated.stderr)
+            closed = run(script, "--root", ".pcba-workflow", "close", cwd=root)
+            self.assertEqual(closed.returncode, 0, closed.stdout + closed.stderr)
+
+            frame.write_bytes(b"edited after close")
+            drifted = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
+            self.assertNotEqual(drifted.returncode, 0)
+            self.assertIn("hash mismatch", drifted.stdout)
+
+    def test_workflow_record_rejects_sequence_gap_and_missing_artifact(self) -> None:
+        script = ROOT / ".agents/skills/manage-pcba-program/scripts/workflow_record.py"
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.assertEqual(run(
+                script, "--root", ".pcba-workflow", "init", "--project", "fixture",
+                cwd=root,
+            ).returncode, 0)
+            artifact = root / "evidence.txt"
+            artifact.write_text("evidence", encoding="utf-8")
+            self.assertEqual(run(
+                script, "--root", ".pcba-workflow", "add",
+                "--stage", "product_definition", "--action", "capture-brief",
+                "--tool", "plan-electronic-product", "--caption-en", "Product brief",
+                "--output", artifact, cwd=root,
+            ).returncode, 0)
+            artifact.unlink()
+            missing = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
+            self.assertNotEqual(missing.returncode, 0)
+            self.assertIn("missing outputs artifact", missing.stdout)
+
+            artifact.write_text("evidence", encoding="utf-8")
+            event_path = root / ".pcba-workflow/events.jsonl"
+            event = json.loads(event_path.read_text(encoding="utf-8"))
+            event["sequence"] = 3
+            event_path.write_text(json.dumps(event) + "\n", encoding="utf-8")
+            gap = run(script, "--root", ".pcba-workflow", "validate", cwd=root)
+            self.assertNotEqual(gap.returncode, 0)
+            self.assertIn("sequence must be 1", gap.stdout)
+            self.assertIn("event hash mismatch", gap.stdout)
+
+    def test_workflow_record_rejects_public_private_identifiers(self) -> None:
+        script = ROOT / ".agents/skills/manage-pcba-program/scripts/workflow_record.py"
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.assertEqual(run(
+                script, "--root", ".pcba-workflow", "init", "--project", "fixture",
+                cwd=root,
+            ).returncode, 0)
+            private_caption = run(
+                script, "--root", ".pcba-workflow", "add",
+                "--stage", "quote", "--action", "capture-quote",
+                "--tool", "operate-jlcpcb-order",
+                "--caption-en", "Quote for person@example.com",
+                cwd=root,
+            )
+            self.assertNotEqual(private_caption.returncode, 0)
+            self.assertIn("possible private identifier", private_caption.stderr)
+
     @staticmethod
     def sha256(path: Path) -> str:
         import hashlib

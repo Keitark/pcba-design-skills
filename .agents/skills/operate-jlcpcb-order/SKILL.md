@@ -18,6 +18,11 @@ Keep four approvals separate:
 
 One approval never implies another.
 
+In a recorded workflow, read the manager's recorded-workflow contract when it
+is available. Store uncropped account/order evidence as private and use only
+cropped or redacted promotion frames. Record authentic importer mismatches and
+their source-side corrections; never stage a fake placement error.
+
 ## Preflight
 
 1. Obtain the immutable release manifest, Gerber/drill archive, BOM, CPL,
@@ -57,6 +62,11 @@ outer size: JLCPCB derives apertures from the released paste layer. Store the
 project-specific request in the release manifest or order record, not as a
 generic hardcoded default. A paste-data change requires a regenerated and
 rehashed release.
+
+For a hand-assembly prototype, compare a compact frameless custom size with the
+site's default large stencil and record size, valid engraving area, price, and
+shipping impact. When JLCPCB assembles every required board, also compare
+omitting the shipped physical stencil; internal PCBA tooling is separate.
 
 ## Match components
 
@@ -99,8 +109,17 @@ Report PCB, assembly, parts, optional physical stencil, setup/extended charges,
 shipping, tax, lead time, coupons, and total. Confirm the shipping address on
 screen with the user.
 
+Check only coupons currently eligible for the configured cart. Record the
+before/after total and eligibility limitation; do not launch an unrelated app,
+claim a promotion, or change order scope merely to make a coupon apply.
+
 Never approve placement, save a materially changed cart, or pay without the
 applicable explicit user authorization. Payment authorization must refer to the
 final displayed total. After an authorized order, preserve confirmation pages,
 order numbers, final artifacts/hashes, component matches, placement evidence,
 approved substitutions, price, and payment record.
+
+When the requested terminal point is “until submit,” capture the reviewed page
+immediately before the final submit/order action, record `order_stop` as
+`USER_REVIEW`, and stop. Reaching the button is not authorization to click it;
+final submission and payment remain separate irreversible actions.

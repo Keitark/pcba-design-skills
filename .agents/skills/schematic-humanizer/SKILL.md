@@ -38,7 +38,10 @@ controlled interfaces, RF, or manufacturer rules are obvious, also read
 
 1. **Capture baseline.** Read repository instructions. Export canonical
    connectivity and ERC/lint. Record hashes or a clean diff for protected
-   layout files. If a generator owns the schematic, edit the generator.
+   layout files. If a generator owns the schematic, edit the generator. In a
+   recorded workflow, also render and preserve the intentionally netlist-style
+   whole schematic before changing its presentation; this is the authoritative
+   “before” frame, not a reconstructed mockup.
 2. **Plan functional sheets.** Group by real flow: connector/input → protection
    or translation → processing/control → memory/output. Separate power/reset
    and repetitive decoupling when useful. Prefer left-to-right flow, power at
@@ -70,6 +73,12 @@ controlled interfaces, RF, or manufacturer rules are obvious, also read
    KiCad XML netlists are accepted directly. Require exact identities, net
    names, and ref/pin memberships, no new ERC/lint findings, and no protected
    layout changes.
+
+In recorded mode, append separate checkpoints for the raw schematic,
+humanized all-sheet render, dense-area visual audit, and connectivity proof.
+Use promotion-safe frames and keep machine reports as hashed outputs. Do not
+create a fake overlap or electrical fault merely to make the transformation
+look dramatic.
 
 ## Completion report
 
