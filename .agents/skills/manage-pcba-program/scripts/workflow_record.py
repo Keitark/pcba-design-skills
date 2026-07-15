@@ -8,6 +8,7 @@ import datetime as dt
 import hashlib
 import json
 import re
+import shutil
 from pathlib import Path
 
 
@@ -105,6 +106,32 @@ def artifact_record(raw_path: str, root: Path, role: str, public: bool) -> dict:
         "sha256": sha256_file(path),
         "size": path.stat().st_size,
     }
+
+
+def snapshot_artifact_record(
+    source: dict, root: Path, role: str, sequence: int, index: int,
+) -> dict:
+    """Copy a mutable input/output into an immutable event checkpoint."""
+    project_root = root.resolve().parent
+    source_path = project_root / source["path"]
+    safe_name = re.sub(r"[^A-Za-z0-9._-]+", "-", source_path.name).strip("-")
+    if not safe_name:
+        safe_name = "artifact"
+    snapshot_dir = root / "snapshots" / f"{sequence:04d}"
+    snapshot_dir.mkdir(parents=True, exist_ok=True)
+    destination = snapshot_dir / (
+        f"{role}-{index:02d}-{source['sha256'][:12]}-{safe_name}"
+    )
+    if destination.exists():
+        if sha256_file(destination) != source["sha256"]:
+            raise ValueError(f"snapshot collision with different content: {destination}")
+    else:
+        temporary = destination.with_suffix(destination.suffix + ".tmp")
+        shutil.copy2(source_path, temporary)
+        temporary.replace(destination)
+    record = artifact_record(str(destination), root, role, False)
+    record["source_path"] = source["path"]
+    return record
 
 
 def load_events(root: Path) -> tuple[list[dict], list[str]]:
@@ -226,9 +253,29 @@ def command_add(args: argparse.Namespace) -> int:
         return 1
     events, _ = load_events(root)
     previous = events[-1]["event_sha256"] if events else ZERO_HASH
+    sequence = len(events) + 1
+    privacy_errors = []
+    privacy_errors.extend(public_text_errors("caption.en", args.caption_en))
+    privacy_errors.extend(public_text_errors("caption.ja", args.caption_ja or ""))
+    if privacy_errors:
+        raise SystemExit("; ".join(privacy_errors))
+
+    input_sources = [
+        artifact_record(path, root, "input", False) for path in args.input
+    ]
+    output_sources = [
+        artifact_record(path, root, "output", False) for path in args.output
+    ]
+    frame_records = [
+        artifact_record(path, root, "frame", True) for path in args.frame
+    ]
+    private_records = [
+        artifact_record(path, root, "private evidence", False)
+        for path in args.private_evidence
+    ]
     event = {
         "schema": SCHEMA,
-        "sequence": len(events) + 1,
+        "sequence": sequence,
         "time_utc": utc_now(),
         "stage": args.stage,
         "action": args.action,
@@ -236,20 +283,18 @@ def command_add(args: argparse.Namespace) -> int:
         "gate_status": args.gate_status,
         "caption": {"en": args.caption_en, "ja": args.caption_ja or ""},
         "source_revision": args.source_revision or "",
-        "inputs": [artifact_record(path, root, "input", False) for path in args.input],
-        "outputs": [artifact_record(path, root, "output", False) for path in args.output],
-        "frames": [artifact_record(path, root, "frame", True) for path in args.frame],
-        "private_evidence": [
-            artifact_record(path, root, "private evidence", False)
-            for path in args.private_evidence
+        "inputs": [
+            snapshot_artifact_record(source, root, "input", sequence, index)
+            for index, source in enumerate(input_sources, 1)
         ],
+        "outputs": [
+            snapshot_artifact_record(source, root, "output", sequence, index)
+            for index, source in enumerate(output_sources, 1)
+        ],
+        "frames": frame_records,
+        "private_evidence": private_records,
         "previous_event_sha256": previous,
     }
-    privacy_errors = []
-    privacy_errors.extend(public_text_errors("caption.en", args.caption_en))
-    privacy_errors.extend(public_text_errors("caption.ja", args.caption_ja or ""))
-    if privacy_errors:
-        raise SystemExit("; ".join(privacy_errors))
     event["event_sha256"] = canonical_hash(event)
     with events_path(root).open("a", encoding="utf-8", newline="\n") as handle:
         handle.write(json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n")

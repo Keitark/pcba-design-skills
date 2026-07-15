@@ -57,7 +57,8 @@ before placement freeze.
 - In recorded mode, append events only after saved, inspectable checkpoints.
   Keep promotion-safe frames separate from private evidence, record authentic
   failures and corrections without staging fake defects, and validate hashes
-  after every stage.
+  after every stage. Let the recorder snapshot mutable inputs and outputs;
+  never edit generated sequence-scoped checkpoint copies.
 - Stop on contradictory revisions, missing source-of-truth data, unverifiable
   safety assumptions, or a specialist BLOCKED result.
 

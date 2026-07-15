@@ -18,6 +18,13 @@ directories for public frames, private evidence, and design snapshots. The
 event stream is sequence-checked and hash-chained. Every referenced artifact is
 SHA-256 checked again during validation and close.
 
+The recorder copies every `--input` and `--output` into a sequence-scoped,
+content-addressed file under `.pcba-workflow/snapshots/`. The event retains the
+original relative path as provenance, but validates the immutable checkpoint.
+This lets working files such as `program-state.json`, product briefs, and native
+EDA sources continue to evolve without rewriting history. Never edit or delete
+the generated checkpoint copies.
+
 ## Record useful checkpoints
 
 Add an event after a saved, inspectable state—not after every mouse movement:
@@ -58,6 +65,8 @@ Capture real failures when they occur and record the verified correction.
 - `--private-evidence` preserves uncropped engineering/order proof but excludes
   it from the promotion frame list.
 - Keep editable/native sources and machine reports as `--input` or `--output`.
+- It is safe to pass the current working path; the recorder creates the
+  immutable checkpoint copy automatically.
 - Visually inspect every public raster at full resolution. The recorder can
   detect common sensitive text in captions and filenames, but it cannot prove
   that pixels are private-data-free.
