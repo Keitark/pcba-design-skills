@@ -39,7 +39,7 @@ Every stage has explicit evidence and invalidation rules.
 | [`schematic-humanizer`](.agents/skills/schematic-humanizer/SKILL.md) | Visible wiring, buses, functional sheets, overlap removal, and visual QA | readable source, PDF/PNG, connectivity comparison |
 | [`pcb-layout-review`](.agents/skills/pcb-layout-review/SKILL.md) | Placement, derivative variants, routing, references, planes, DRC, mechanics, and DFM | `layout-review.json`, experiment ledger |
 | [`release-pcba-fabrication`](.agents/skills/release-pcba-fabrication/SKILL.md) | Revision-consistent Gerber, drill, BOM, CPL, and release evidence | `release-manifest.json` |
-| [`operate-jlcpcb-order`](.agents/skills/operate-jlcpcb-order/SKILL.md) | JLCPCB quote, matching, CPL preview, cost, cart, and approval gates | placement/quote/order records |
+| [`operate-jlcpcb-order`](.agents/skills/operate-jlcpcb-order/SKILL.md) | JLCPCB quote, matching, CPL preview, optional physical stencil, cost, cart, and approval gates | placement/quote/order records |
 
 [The selection guide](docs/choose-a-skill.md) includes input-based examples and
 shows which skills can be used without the manager.

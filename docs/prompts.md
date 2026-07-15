@@ -74,4 +74,7 @@ Use $operate-jlcpcb-order with [release-manifest/path]. Configure only released
 options, inspect cost anomalies and every component match, calibrate and audit
 CPL physical pad instances, visually inspect every top/bottom placement, and
 stop for separate substitution, placement, final-price, and payment approvals.
+Also request the optional physical stencil described in the manifest. Verify
+the paste side, frame type, outer size, thickness, and price; do not design a
+separate stencil outline just to set the ordered outer size.
 ```

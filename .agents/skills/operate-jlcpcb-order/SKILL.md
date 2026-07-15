@@ -1,6 +1,6 @@
 ---
 name: operate-jlcpcb-order
-description: Operate and review a JLCPCB PCB/PCBA quote or order using a frozen Gerber/drill, BOM, CPL, sourcing lock, constraints, and release manifest. Use for browser upload, board options, cost anomalies, coupons, component matching, substitutions, imported placement calibration, top/bottom preview inspection, cart preparation, or order records without silently accepting placement errors or payment.
+description: Operate and review a JLCPCB PCB/PCBA quote, optional physical-stencil request, or order using a frozen Gerber/drill, BOM, CPL, sourcing lock, constraints, and release manifest. Use for browser upload, board or stencil options, cost anomalies, coupons, component matching, substitutions, imported placement calibration, top/bottom preview inspection, cart preparation, or order records without silently accepting placement errors or payment.
 ---
 
 # JLCPCB Order Operator
@@ -44,6 +44,20 @@ premium process. Use the live quote rather than a hardcoded universal value.
 If a material surcharge is caused by geometry, stop and return measured feedback
 to `$pcb-layout-review`; require a new verified release before re-uploading.
 
+## Request an optional physical stencil
+
+When the user wants a physical stencil shipped with or separately from the
+PCB, read [references/stencil-ordering.md](references/stencil-ordering.md).
+Distinguish it from JLCPCB's internal PCBA tooling. Verify that the requested
+paste side exists in the frozen Gerber release.
+
+Treat frame type, outer size, thickness, side, and fiducial handling as order
+settings. Do not design a second stencil outline merely to request a custom
+outer size: JLCPCB derives apertures from the released paste layer. Store the
+project-specific request in the release manifest or order record, not as a
+generic hardcoded default. A paste-data change requires a regenerated and
+rehashed release.
+
 ## Match components
 
 Match every line to the exact MPN or an explicitly approved alternate. Verify
@@ -81,8 +95,9 @@ machine and visual review until unresolved count is zero.
 
 ## Final quote and order
 
-Report PCB, assembly, parts, setup/extended charges, shipping, tax, lead time,
-coupons, and total. Confirm the shipping address on screen with the user.
+Report PCB, assembly, parts, optional physical stencil, setup/extended charges,
+shipping, tax, lead time, coupons, and total. Confirm the shipping address on
+screen with the user.
 
 Never approve placement, save a materially changed cart, or pay without the
 applicable explicit user authorization. Payment authorization must refer to the
