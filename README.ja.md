@@ -15,7 +15,7 @@
 [![English](https://img.shields.io/badge/docs-English-8b5cf6.svg)](README.md)
 [![日本語](https://img.shields.io/badge/docs-日本語-e85d75.svg)](README.ja.md)
 
-[English](README.md) · [スキルを選ぶ](docs/choose-a-skill.ja.md) · [インストール](docs/installation.ja.md) · [プロンプト例](docs/prompts.ja.md) · [nescart 事例](docs/case-study-nescart.ja.md)
+[English](README.md) · [スキルを選ぶ](docs/choose-a-skill.ja.md) · [インストール](docs/installation.ja.md) · [プロンプト例](docs/prompts.ja.md) · [工程を動画用に記録](docs/recorded-workflow.ja.md) · [nescart 事例](docs/case-study-nescart.ja.md)
 
 </div>
 
@@ -94,6 +94,10 @@ Claude Code:
 ```
 
 個別スキルの日本語依頼文は[プロンプト例](docs/prompts.ja.md)にあります。
+
+ネットリスト風回路図から Humanize された回路図への変化、配置・配線、PCBA
+実装ずれ修正、見積・クーポン確認、注文確定直前での安全停止を動画素材として
+残す場合は[工程記録ガイド](docs/recorded-workflow.ja.md)を参照してください。
 
 ## 安全性と証拠
 

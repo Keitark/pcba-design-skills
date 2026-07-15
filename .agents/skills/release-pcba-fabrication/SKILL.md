@@ -51,6 +51,11 @@ Run `scripts/validate_release_manifest.py` after moving or packaging the
 release. A missing file, hash drift, mixed revision, stale sourcing lock, or
 failed required check blocks release.
 
+In a recorded workflow, append checkpoints for the frozen source revision,
+independent Gerber/drill inspection, BOM/CPL reconciliation, renders, and the
+validated release manifest. Promotion frames may show sanitized viewers, but
+the machine-readable release and hashes remain the approval evidence.
+
 ## Handoff
 
 Deliver an immutable release directory containing the manifest, manufacturing

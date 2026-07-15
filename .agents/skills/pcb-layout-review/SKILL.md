@@ -92,6 +92,12 @@ improvement and may not add opens, real DRC, power disconnects, or verified
 manufacturing defects. A successful route for one trapped net is not promotable
 when its coupled donor set is incomplete or another lane becomes stranded.
 
+In a recorded workflow, preserve hash-bound frames for initial placement,
+placement freeze, meaningful accepted/rejected experiments, final routing,
+individual signal layers, DRC/connectivity proof, and top/bottom 3D. Record
+actual regressions when they teach something, but never introduce a defect for
+the video. Keep every frame tied to the paired native board/project state.
+
 ## Release gate
 
 Require zero unexplained raw disconnects, zero real DRC errors, zero power
