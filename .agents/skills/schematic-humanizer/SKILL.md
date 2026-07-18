@@ -39,7 +39,10 @@ controlled interfaces, RF, or manufacturer rules are obvious, also read
 1. **Capture baseline.** Read repository instructions. Export canonical
    connectivity and ERC/lint. Record hashes or a clean diff for protected
    layout files. If a generator owns the schematic, edit the generator. In a
-   recorded workflow, also render and preserve the intentionally netlist-style
+   generated variant, trace the selected configuration and presentation or
+   placement override into the generator; a defined but unused table is not
+   evidence. In a recorded workflow, also render and preserve the intentionally
+   netlist-style
    whole schematic before changing its presentation; this is the authoritative
    “before” frame, not a reconstructed mockup.
 2. **Plan functional sheets.** Group by real flow: connector/input → protection
@@ -72,7 +75,9 @@ controlled interfaces, RF, or manufacturer rules are obvious, also read
    same adapter. Run `python scripts/compare_connectivity.py before after`;
    KiCad XML netlists are accepted directly. Require exact identities, net
    names, and ref/pin memberships, no new ERC/lint findings, and no protected
-   layout changes.
+   layout changes. After any generator configuration or override-binding
+   change, prove the active variant in a deterministic manifest or sentinel
+   output and repeat exact connectivity comparison; ERC alone is insufficient.
 
 In recorded mode, append separate checkpoints for the raw schematic,
 humanized all-sheet render, dense-area visual audit, and connectivity proof.

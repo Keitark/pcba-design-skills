@@ -12,6 +12,8 @@ covering:
 
 - connector pin order, pitch, contact geometry, mating datum, and insertion
   envelope;
+- exact orderable connector MPN, body, locating features, footprint origin,
+  mating-card thickness, insertion depth, retention, and sample status;
 - removed, added, or reassigned circuit functions and safe-state behavior;
 - power, ground, audio, protection, programming, and user-interface changes;
 - board outline, thickness, slots, bosses, shell limits, antenna regions, and
@@ -28,6 +30,10 @@ Treat contacts, tongue, bevel, insertion keepouts, and the host datum as hard
 geometry. If the target needs more area, extend only in a direction proven by
 the host and enclosure. Require a 1:1 fit gate for every nonstandard outline;
 a clean 3D PCB render is not enclosure proof.
+
+For a socket, module, or board-to-board connector, distinguish intentional
+body/mouth overhang from pads or support features that lack substrate. Keep a
+conservative courtyard while the exact body or physical sample is unverified.
 
 ## 3. Reuse intent, not coordinates
 
@@ -57,6 +63,8 @@ guessing from its headline warning:
 - verify that the minimum physical blocker was allowed to move.
 
 Retry only after the movable window or board conditions materially change.
+Board growth counts only if the new geometry creates a measurable corridor;
+extra area elsewhere does not resolve a local connector fanout blocker.
 
 ## 5. Prove visuals and release together
 
@@ -67,6 +75,11 @@ limits. Then run normalized silk-over-silk, silk-over-copper, and edge-clearance
 checks. Preserve pin-1, polarity, and functional labels; classify intentional
 connector-body overhang separately and leave unresolved labels at
 `USER_REVIEW`.
+
+For multi-board products, add every adapter, daughtercard, and mating connector
+to a one-scale assembly view and provide a separate orthographic dimension
+view. Mark dimensions as measured, drawing-derived, inferred, or TBD, and label
+all proxy bodies. A plausible exploded render is not a mechanical release gate.
 
 Release still requires one saved board/project state with zero unexplained raw
 disconnects, zero real DRC, zero power disconnects, passing layout gates,

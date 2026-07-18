@@ -6,6 +6,9 @@
   delta exist before placement reuse.
 - Connector pitch, mating datum, fingers/tongue, insertion envelope, shell
   features, and allowed growth direction are independently verified.
+- Exact connector MPN and drawing agree with body, contacts, locating features,
+  pin 1, origin, footprint, mating card, insertion depth, and retention. When
+  the sample is unavailable, its conservative envelope remains in review.
 - Connector pin order and functional corridors match architecture.
 - Protection, translators, buffers, memory, processing, and outputs do not
   backtrack unnecessarily.
@@ -18,6 +21,9 @@
 - Large/critical components have verified MPN, package, footprint, pin 1, and
   licensed 3D model. Connectors and controls are mechanically accessible.
 - Logical/constraint and visual/mechanical passes are recorded independently.
+- Every dense connector/module power and GND pad has a legal dogbone, direct
+  via, same-layer path to a stitched region, or approved process exception
+  before signal routing begins.
 
 ## Routing and return paths
 
@@ -40,6 +46,8 @@
   real until independently proven otherwise.
 - Zero pad opens is insufficient when track/track, track/via, or zone/plane
   components remain separated.
+- Same-net zone fragments are each proven to reach the canonical rail; blanket
+  stitches or island deletion are not accepted as connectivity proof.
 - Classify intentional fabrication geometry narrowly; do not hide unrelated
   errors with broad waivers.
 - DRC rules match the chosen manufacturing capability and quote, not values
@@ -55,8 +63,16 @@
   model, rotation, or position change.
 - Missing or offset bodies, wrong pin 1/polarity, unsupported connectors, or
   mechanical collisions block release even when copper DRC is clean.
+- Intentional body or mating-mouth overhang is distinguished from unsupported
+  copper pads, plated features, solder joints, or missing board substrate.
 - Donor/variant size comparisons use one orthographic scale with explicit
   dimensions; independently fitted screenshots are rejected.
+- Multi-board assemblies use real native renders or STEP at one scale plus an
+  orthographic dimension view. Every dimension is classified as measured,
+  drawing-derived, inferred, or TBD, and every proxy is disclosed.
+- Stackup, outline, via-process, and routing experiments start from frozen
+  inputs and are compared with the current best safe candidate. Board growth
+  counts only when it creates a measurable corridor or clearance.
 - Silk-over-silk, silk-over-copper, and edge-clearance findings are normalized
   and visually classified. Critical markings remain readable, and unresolved
   dense labels are `USER_REVIEW`, not silently deleted.

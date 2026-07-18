@@ -771,6 +771,49 @@ class ToolTests(unittest.TestCase):
             self.assertNotEqual(private_caption.returncode, 0)
             self.assertIn("possible private identifier", private_caption.stderr)
 
+    def test_layout_and_humanizer_field_gates_are_published(self) -> None:
+        layout_root = ROOT / ".agents/skills/pcb-layout-review"
+        layout_skill = (layout_root / "SKILL.md").read_text(encoding="utf-8")
+        connector_ref = (
+            layout_root / "references/connector-stack-and-fanout.md"
+        ).read_text(encoding="utf-8")
+        review_record = (
+            layout_root / "references/layout-review-record.md"
+        ).read_text(encoding="utf-8")
+        humanizer_skill = (
+            ROOT / ".agents/skills/schematic-humanizer/SKILL.md"
+        ).read_text(encoding="utf-8")
+        humanizer_adapters = (
+            ROOT / ".agents/skills/schematic-humanizer/references/adapters.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("connector-stack-and-fanout.md", layout_skill)
+        normalized_connector_ref = " ".join(connector_ref.split())
+        self.assertIn("current best safe candidate", normalized_connector_ref)
+        self.assertIn("Same-net zone fragments", connector_ref)
+        self.assertIn("Physical proof", connector_ref)
+        self.assertIn("selected configuration", humanizer_skill)
+        normalized_adapters = " ".join(humanizer_adapters.split())
+        self.assertIn("silent fallback to default placement", normalized_adapters)
+
+        json_block = review_record.split("```json", 1)[1].split("```", 1)[0]
+        record = json.loads(json_block)
+        self.assertIn("connector_stack", record)
+        self.assertIn("mechanical_assembly", record)
+        self.assertIn("fanout", record)
+        self.assertIn("experiment_baseline", record)
+        self.assertIn("sample_measured", record["connector_stack"])
+        self.assertIn("overall_height_basis", record["mechanical_assembly"])
+        self.assertIn("best_safe_candidate_sha256", record["experiment_baseline"])
+
+        published_text = "\n".join(
+            [layout_skill, connector_ref, review_record,
+             humanizer_skill, humanizer_adapters]
+        ).lower()
+        self.assertNotIn("tang-nano-famicom-av", published_text)
+        windows_root = "f:" + chr(92)
+        self.assertNotIn(windows_root, published_text)
+
     @staticmethod
     def sha256(path: Path) -> str:
         import hashlib

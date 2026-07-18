@@ -35,3 +35,18 @@
 - Close layout review with normalized silkscreen checks and both-side visual
   evidence. Preserve polarity/pin-1 meaning and classify intentional connector
   overhang separately from fabrication defects.
+- Promote connector mechanics in stages: electrical mapping, exact orderable
+  part, verified footprint, defined mating stack, then measured physical fit.
+  A clean DRC cannot replace a missing connector sample or drawing.
+- Distinguish harmless body/mating-mouth overhang from pads or support features
+  that lack substrate. Check transformed physical pads against the real outline.
+- Classify every dense connector/module power and GND escape before signal
+  routing. Local placement and pad-specific dogbones are safer than hoping a
+  later fill or generic via grid will repair an impossible corridor.
+- Treat same-net zone fragments as real opens until each reaches the canonical
+  rail through individually proven copper or stitches.
+- Compare layer, outline, via, and routing experiments with the best safe saved
+  candidate from the same frozen input. Zero opens alone is not improvement.
+- Use same-scale native multi-board renders and an orthographic dimension view;
+  label geometry estimates and proxy bodies so presentation evidence is never
+  mistaken for mechanical release proof.

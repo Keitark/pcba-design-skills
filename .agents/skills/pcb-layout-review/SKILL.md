@@ -12,6 +12,8 @@ and [references/proven-lessons.md](references/proven-lessons.md). Record the
 gate with [references/layout-review-record.md](references/layout-review-record.md)
 and select an evidence path from
 [references/eda-adapters.md](references/eda-adapters.md).
+For modules, card sockets, daughtercards, or dense connector fanout, also read
+[references/connector-stack-and-fanout.md](references/connector-stack-and-fanout.md).
 For a derivative board, also read
 [references/variant-porting.md](references/variant-porting.md).
 
@@ -26,7 +28,10 @@ For a derivative board, also read
 3. Record board/project hashes, layer stack, net classes, rules, placement,
    connectivity, raw DRC, classified DRC, via/drill histogram, and top/bottom
    renders before changing anything.
-4. Distinguish hard constraints from negotiable targets. Never trade a short,
+4. Record connector maturity and every assembly dimension as measured,
+   drawing-derived, inferred, or TBD. Treat a plausible model as visual
+   evidence, not mechanical proof.
+5. Distinguish hard constraints from negotiable targets. Never trade a short,
    new open, corrupted return path, unsupported pad, keepout violation, unsafe
    ownership state, or fabrication violation for a better score.
 
@@ -57,6 +62,8 @@ For a derivative board, also read
 2. **Critical locality:** decoupling in the supply-pin escape path, tight
    regulator loops, correct crystals/feedback, connector protection, antenna
    edge/keepout, user access, thermal paths, and enclosure clearance.
+   Before signal routing, prove that every dense connector/module power and GND
+   pad has a legal standard-process escape or an approved process exception.
 3. **Layer and reference strategy:** choose layer count from bus density,
    routing channels, return paths, RF, controlled interfaces, power current,
    board size, and fabrication cost. A solid reference plane is normally more
@@ -86,6 +93,11 @@ manufacturing defects. Record it with `scripts/score_experiment.py`; write new
 project-specific lessons with `scripts/record_lesson.py`. Both default to
 `.pcba-workflow/` and never mutate the installed skill.
 
+Freeze the input and compare stackup, outline, via-process, and routing
+experiments with the current best safe candidate using the complete gate
+vector. A larger board or extra layer is useful only when it removes a measured
+blocker without regressing another gate.
+
 Prefer high-scoring applicable methods. Do not repeat a negative method unless
 conditions materially changed. An accepted candidate must be a measured net
 improvement and may not add opens, real DRC, power disconnects, or verified
@@ -103,6 +115,9 @@ the video. Keep every frame tied to the paired native board/project state.
 Require zero unexplained raw disconnects, zero real DRC errors, zero power
 disconnects, all project layout checks passing, verified planes/critical nets,
 and visual/mechanical/silkscreen PASS in the same saved board/project state.
+If assembly depends on an unverified connector body, card thickness, insertion
+depth, retention feature, or enclosure stack, the result remains
+`USER_REVIEW` or `BLOCKED` even when DRC is clean.
 Document only narrow, evidence-backed waivers in
 `.pcba-workflow/layout-review.json`. Hand the result to
 `$release-pcba-fabrication`; supplier CPL interpretation remains a separate
