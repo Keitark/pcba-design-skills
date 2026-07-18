@@ -4,6 +4,16 @@ Use native exporters whenever possible. An adapter is acceptable only when it ca
 
 可能な限り EDA の標準エクスポートを使い、変更前後で同じ正規化手順を再現できる場合だけ同一性を判定します。
 
+## Generated schematic binding guard
+
+When a generator supports variants or separate presentation/placement tables,
+record the source module, selected variant, active override table, generator
+version, and output hash. Prove that the selected override is consumed with a
+deterministic manifest, trace, or harmless sentinel fixture. Reject silent
+fallback to default placement even when generation and ERC succeed. After a
+binding change, regenerate from a clean state and repeat exact connectivity and
+all-sheet visual comparison.
+
 | Source | Safe source/edit path | Connectivity and render evidence | Limitations / 注意点 |
 |---|---|---|---|
 | **KiCad — first class / 最優先対応** | Detect `.kicad_pro`, `.kicad_sch`, symbol tables, and any generator. Edit generator or native schematic. | Export KiCad XML netlists before/after with `kicad-cli sch export netlist --format kicadxml`; compare directly with `compare_connectivity.py`. Run native ERC. Export PDF and render all pages. | KiCad CLI defaults to its S-expression netlist, so request XML explicitly. Preserve references, net names, pin numbers, and PCB bytes. Net codes, coordinates, timestamps, and sheet paths are presentation/export metadata. |
