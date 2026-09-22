@@ -28,6 +28,30 @@ The suite does not confuse a clean drawing with a correct circuit, zero opens
 with a releasable PCB, or a successful upload with correct assembly placement.
 Every stage has explicit evidence and invalidation rules.
 
+## AI Expo: from real hardware to reusable engineering
+
+**AIと実機を作る。その経験を、次の設計で使えるスキルにする。**
+Build real hardware with AI—and reuse what the engineering process teaches us.
+
+These skills grew from work on the
+[ROM Vomitter Wi-Fi Famicom cartridge](https://github.com/Keitark/fc-rom-vomitter).
+This repository currently publishes the eight skills listed below. The
+[ChatPCBA agent plugin](https://github.com/Keitark/chatpcba) packages an expanded
+eleven-skill workflow, including simulation, silkscreen review, and evidence
+presentation. The local exhibition dashboard is a separate application, not
+a hosted service shipped by either repository.
+
+ROM Vomitterの開発経験から、要求整理・回路設計・回路図の可読化・基板設計・製造レビューを
+再利用可能なスキルへ整理しました。ChatPCBAの11スキルと、このリポジトリの公開8スキルは
+配布範囲が異なります。実機は現在の統合ダッシュボード完成前に開発されました。
+
+The full engineering story is: interview → requirements and applicable checks
+→ circuit and sourcing → readable schematic with connectivity verification
+→ applicable simulation → placement/routing → fabrication package → JLCPCB review.
+SI, PI, thermal and antenna checks depend on project requirements, rather than
+being mandatory simulations for every board. Recorded lessons are candidates
+for evaluation and review, not proof of autonomous improvement.
+
 ## Choose one skill or the whole team
 
 | Skill | Use it for | Main artifact |
